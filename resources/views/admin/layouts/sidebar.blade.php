@@ -7,18 +7,18 @@
             <div class="logo-box">
                 <a href="index.html" class="logo logo-light">
                     <span class="logo-sm">
-                        <img src="assets/images/logo-sm.png" alt="" height="22">
+                        <img src="{{asset('data/logo.png')}}" alt="" height="30">
                     </span>
                     <span class="logo-lg">
-                        <img src="assets/images/logo-light.png" alt="" height="24">
+                        <img src="{{asset('data/logo.png')}}" alt="" height="40">
                     </span>
                 </a>
                 <a href="index.html" class="logo logo-dark">
                     <span class="logo-sm">
-                        <img src="assets/images/logo-sm.png" alt="" height="22">
+                        <img src="{{asset('data/logo.png')}}" alt="" height="40">
                     </span>
                     <span class="logo-lg">
-                        <img src="assets/images/logo-dark.png" alt="" height="24">
+                        <img src="{{asset('data/logo.png')}}" alt="" height="40">
                     </span>
                 </a>
             </div>
@@ -33,56 +33,105 @@
                         <span> Dashboard </span>
                         <span class="menu-arrow"></span>
                     </a>
-                    <div class="collapse" id="sidebarDashboards">
-                        <ul class="nav-second-level">
-                            <li>
-                                <a href="index.html" class="tp-link">Analytical</a>
-                            </li>
-                            <li>
-                                <a href="ecommerce.html" class="tp-link">E-commerce</a>
-                            </li>
-                        </ul>
-                    </div>
                 </li>
 
-                <!-- <li>
-                                <a href="landing.html" target="_blank">
-                                    <i data-feather="globe"></i>
-                                    <span> Landing </span>
-                                </a>
-                            </li> -->
-
+               
                 <li class="menu-title">Pages</li>
 
                 <li>
                     <a href="#sidebarAuth" data-bs-toggle="collapse">
                         <i data-feather="users"></i>
-                        <span> Authentication </span>
+                        <span> Admin Users Manage </span>
                         <span class="menu-arrow"></span>
                     </a>
                     <div class="collapse" id="sidebarAuth">
                         <ul class="nav-second-level">
                             <li>
-                                <a href="auth-login.html" class="tp-link">Log In</a>
+                                <a href="{{route('admin-user.index')}}" class="tp-link">All Admin Users</a>
                             </li>
+                            
+                        </ul>
+                    </div>
+                </li>             
+
+
+                <li>
+                    <a href="#sidebarAuth" data-bs-toggle="collapse">
+                        <i data-feather="users"></i>
+                        <span> Brand Manage </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <div class="collapse" id="sidebarAuth">
+                        <ul class="nav-second-level">
                             <li>
-                                <a href="auth-register.html" class="tp-link">Register</a>
+                                <a href="{{route('brand.index')}}" class="tp-link">All Brands</a>
                             </li>
+                            
+                        </ul>
+                    </div>
+                </li>
+
+
+                <li>
+                    <a href="#sidebarAuth" data-bs-toggle="collapse">
+                        <i data-feather="users"></i>
+                        <span> Warehouse Manage </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <div class="collapse" id="sidebarAuth">
+                        <ul class="nav-second-level">
                             <li>
-                                <a href="auth-recoverpw.html" class="tp-link">Recover Password</a>
+                                <a href="{{route('warehouse.index')}}" class="tp-link">All WareHouses</a>
                             </li>
+                            
+                        </ul>
+                    </div>
+                </li>
+
+                <li>
+                    <a href="#sidebarAuth" data-bs-toggle="collapse">
+                        <i data-feather="users"></i>
+                        <span> Supplier Manage </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <div class="collapse" id="sidebarAuth">
+                        <ul class="nav-second-level">
                             <li>
-                                <a href="auth-lock-screen.html" class="tp-link">Lock Screen</a>
+                                <a href="{{route('supplier.index')}}" class="tp-link">All Suppliers</a>
                             </li>
+                            
+                        </ul>
+                    </div>
+                </li>
+
+                <li>
+                    <a href="#sidebarAuth" data-bs-toggle="collapse">
+                        <i data-feather="users"></i>
+                        <span> Customer Manage </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <div class="collapse" id="sidebarAuth">
+                        <ul class="nav-second-level">
                             <li>
-                                <a href="auth-confirm-mail.html" class="tp-link">Confirm Mail</a>
+                                <a href="{{route('customer.index')}}" class="tp-link">All Customers</a>
                             </li>
+                            
+                        </ul>
+                    </div>
+                </li>
+
+                <li>
+                    <a href="#sidebarAuth" data-bs-toggle="collapse">
+                        <i data-feather="users"></i>
+                        <span> Product Manage </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <div class="collapse" id="sidebarAuth">
+                        <ul class="nav-second-level">
                             <li>
-                                <a href="email-verification.html" class="tp-link">Email Verification</a>
+                                <a href="{{route('product.index')}}" class="tp-link">All Product Category</a>
                             </li>
-                            <li>
-                                <a href="auth-logout.html" class="tp-link">Logout</a>
-                            </li>
+                            
                         </ul>
                     </div>
                 </li>

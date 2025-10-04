@@ -2,17 +2,32 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateUserRequest;
+use App\Http\Requests\UserStoreRequest;
 use App\Models\User;
+use App\Repositories\AdminUserRepository;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 
 class AdminController extends Controller
 {
-   public function adminLogout(Request $request)
+     protected $adminUserRespository;
+
+    public function __construct(AdminUserRepository $adminUserRespository)
+    {
+        $this->adminUserRespository = $adminUserRespository;
+    }
+   
+    public function adminLogout(Request $request)
     {
         Auth::guard('web')->logout();
 
@@ -23,52 +38,114 @@ class AdminController extends Controller
         return redirect('/login');
     }
 
-    public function adminProfile()
+    public function index()
     {
-        $id = Auth::user()->id;
-        $profileData = User::find($id);
-        return view('admin.admin_profile',compact('profileData'));
+        $currentUser = Auth::user();
+        $profileData = User::all();
+        return view('admin.admin-profile.index',compact('currentUser','profileData'));
     }
 
-    public function profileStore(Request $request)
+    
+    public function datatable(Request $request)
     {
+        if ($request->ajax()) {
+            return $this->adminUserRespository->datatable($request);
+        }
+    }
 
-        $id = Auth::user()->id;
-        $data = User::find($id);
-
-        $data->name = $request->name;
-        $data->email = $request->email;
-        $data->phone = $request->phone;
-        $data->address = $request->address;
+    public function create()
+    {
         
-        $oldPhotoPath = $data->photo;
-
-        if($request->hasFile('photo')){
-            $file = $request->file('photo');
-            $filename = time() . '.' .$file->getClientOriginalExtension();
-            $file->move(public_path('upload/user_images'), $filename);
-            $data->photo = $filename;
-
-            if($oldPhotoPath && $oldPhotoPath !== $filename){
-                $this->deleteOldImage($oldPhotoPath);
-            }
-        }
-
-        $data->save();
-
-        $notification = array(
-            'message' => 'Profile Updated Successfully',
-            'alert-type' => 'success'
-        );
-
-        return redirect()->back()->with($notification);
+        return view('admin.admin-profile.create');
     }
 
-    private function deleteOldImage(string $oldPhotPath) : void{
-        $fullPath = public_path('upload/user_images/'. $oldPhotPath);
-        if(file_exists($fullPath)){
-            unlink($fullPath);
+
+
+     public function store(UserStoreRequest $request)
+     {
+        
+         $data = new User();
+
+         $data->name = $request->name;
+         $data->email = $request->email;
+         $data->phone = $request->phone;
+         $data->address = $request->address;
+         $data->password = Hash::make($request->password);
+        
+         $profile_img_name = null;
+            if ($request->hasFile('photo')) {
+                $profile_img_file = $request->file('photo');
+                $profile_img_name = uniqid() . '_' . time() . '.' . $profile_img_file->getClientOriginalExtension();
+                $profile_img_file->move(public_path('upload/user_images'), $profile_img_name);
+            
+            }
+
+            $data->photo = $profile_img_name;
+
+            $data->save();
+
+            $notification = array(
+                'message' => 'Profile Updated Successfully',
+                'alert-type' => 'success',
+            );
+
+            return redirect()->back()->with($notification);
+     }
+    
+    
+
+    public function edit($id)
+    {
+        $currentUser = Auth::user(); 
+        $profileData = User::findOrFail($id); 
+
+        return view('admin.admin-profile.edit', compact('currentUser', 'profileData'));
+    }
+
+
+    public function update(UpdateUserRequest $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        // Update basic fields
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->phone = $request->phone;
+        $user->address = $request->address;
+
+        // Handle profile image
+        if ($request->hasFile('photo')) {
+            // Delete old image if exists
+            if ($user->photo && file_exists(public_path('upload/user_images/' . $user->photo))) {
+                unlink(public_path('upload/user_images/' . $user->photo));
+            }
+
+            $file = $request->file('photo');
+            $filename = uniqid() . '_' . time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('upload/user_images'), $filename);
+
+            $user->photo = $filename;
         }
+
+        $user->save();
+
+        return redirect()->route('admin-profile.index')->with([
+            'message' => 'Profile updated successfully!',
+            'alert-type' => 'success'
+        ]);
+    }
+
+    public function destroy($id)
+    {
+        $item = User::findOrFail($id);
+
+        if ($item->photo && file_exists(public_path('upload/user_images/' . $item->photo))) {
+            unlink(public_path('upload/user_images/' . $item->photo));
+        }
+
+        $item->delete();
+
+        return redirect()->back()->with('success', 'User deleted successfully!');
     }
 
 
@@ -111,5 +188,8 @@ class AdminController extends Controller
             );
             return redirect()->route('login')->with($notification);
     }
+
+    
+
 }
 

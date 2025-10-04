@@ -1,12 +1,21 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminUserController;
+use App\Http\Controllers\Backend\BrandController;
+use App\Http\Controllers\Backend\CustomerController;
+use App\Http\Controllers\Backend\ProductController;
+use App\Http\Controllers\Backend\SupplierController;
+use App\Http\Controllers\Backend\WareHouseController;
+use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
+
+
 
 Route::get('/dashboard', function () {
     return view('admin.index');
@@ -23,9 +32,26 @@ require __DIR__.'/auth.php';
 Route::get('admin/logout',[AdminController::class, 'adminLogout'])->name('admin.logout');
 
 Route::middleware('auth')->group(function () {
-    
-    Route::get('/admin/profile',[AdminController::class, 'adminProfile'])->name('admin.profile');
-    Route::post('/profile/store',[AdminController::class, 'profileStore'])->name('profile.store');
-    Route::post('/admin/password/update',[AdminController::class, 'adminPasswordUpdate'])->name('admin.password.update');
+    Route::resource('admin-user',AdminUserController::class);
+    Route::get('change-password', [PasswordController::class, 'edit'])->name('change-password.edit');
+    Route::put('change-password', [PasswordController::class, 'update'])->name('change-password.update');
 
+});
+
+Route::middleware('auth')->group(function (){
+    Route::resource('brand',BrandController::class);
+    Route::get('brand-datatable', [BrandController::class, 'brandDatatable'])->name('brand-datatable');
+
+
+    Route::resource('warehouse', WareHouseController::class);
+    Route::get('warehouse-datatable', [WareHouseController::class, 'warehouseDatatable'])->name('warehouse-datatable');
+
+    Route::resource('supplier', SupplierController::class);
+    Route::get('supplier-datatable', [SupplierController::class, 'supplierDatatable'])->name('supplier-datatable');
+    
+    Route::resource('customer', CustomerController::class);
+    Route::get('customer-datatable', [CustomerController::class, 'customerDatatable'])->name('customer-datatable');
+    
+    Route::resource('product', ProductController::class);
+    Route::get('product-datatable', [ProductController::class, 'productDatatable'])->name('product-datatable');
 });

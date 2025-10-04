@@ -1,5 +1,5 @@
 @extends('admin.admin_main')
-@section('content')
+@section('admin')
     <div class="content">
 
         <!-- Start Content-->

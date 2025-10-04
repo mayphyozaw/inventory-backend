@@ -50,8 +50,8 @@
                             <a href="javascript:void(0);"
                                 class="dropdown-item notify-item text-muted link-primary active">
                                 <div class="notify-icon">
-                                    <img src="{{asset('backend/assets/images/users/user-12.jpg')}}" class="img-fluid rounded-circle"
-                                        alt="" />
+                                    <img src="{{ asset('backend/assets/images/users/user-12.jpg') }}"
+                                        class="img-fluid rounded-circle" alt="" />
                                 </div>
                                 <div class="d-flex align-items-center justify-content-between">
                                     <p class="notify-details">Carl Steadham</p>
@@ -66,8 +66,8 @@
                             <!-- item-->
                             <a href="javascript:void(0);" class="dropdown-item notify-item text-muted link-primary">
                                 <div class="notify-icon">
-                                    <img src="{{asset('backend/assets/images/users/user-2.jpg')}}" class="img-fluid rounded-circle"
-                                        alt="" />
+                                    <img src="{{ asset('backend/assets/images/users/user-2.jpg') }}"
+                                        class="img-fluid rounded-circle" alt="" />
                                 </div>
                                 <div class="notify-content">
                                     <div class="d-flex align-items-center justify-content-between">
@@ -92,8 +92,8 @@
                             <!-- item-->
                             <a href="javascript:void(0);" class="dropdown-item notify-item text-muted link-primary">
                                 <div class="notify-icon">
-                                    <img src="{{asset('backend/assets/images/users/user-3.jpg')}}" class="img-fluid rounded-circle"
-                                        alt="" />
+                                    <img src="{{ asset('backend/assets/images/users/user-3.jpg') }}"
+                                        class="img-fluid rounded-circle" alt="" />
                                 </div>
                                 <div class="notify-content">
                                     <div class="d-flex align-items-center justify-content-between">
@@ -118,14 +118,15 @@
                 </li>
 
                 <li class="dropdown notification-list topbar-dropdown">
-                    
+
                     <a class="nav-link dropdown-toggle nav-user me-0" data-bs-toggle="dropdown" href="#"
                         role="button" aria-haspopup="false" aria-expanded="false">
-                        <img src="{{ (!empty(auth()->guard('web')->user()->photo)) 
-                        ? url('upload/user_images/' . auth()->guard('web')->user()->photo ?? '') 
-                        : url('upload/no_image.jpg') }}" alt="user-image" class="rounded-circle">
+                        <img src="{{ !empty(auth()->guard('web')->user()->photo)
+                            ? url('upload/user_images/' . auth()->guard('web')->user()->photo ?? '')
+                            : url('upload/no_image.jpg') }}"
+                            alt="user-image" class="rounded-circle">
                         <span class="pro-user-name ms-1">
-                            {{auth()->guard('web')->user()->name ?? ''}} <i class="mdi mdi-chevron-down"></i>
+                            {{ auth()->guard('web')->user()->name ?? '' }} <i class="mdi mdi-chevron-down"></i>
                         </span>
                     </a>
 
@@ -150,10 +151,31 @@
                         <div class="dropdown-divider"></div>
 
                         <!-- item-->
-                        <a href="{{route('admin.logout')}}" class="dropdown-item notify-item">
+                        <a href="{{ route('admin.logout') }}" class="dropdown-item notify-item">
                             <i class="mdi mdi-location-exit fs-16 align-middle"></i>
                             <span>Logout</span>
                         </a>
+
+                    </div>
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-user-edit mr-2"></i> Edit Profile
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-lock mr-2"></i> Change Password
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+
+                            <a class="dropdown-item" href="{{ route('logout') }}"
+                                onclick="event.preventDefault();
+                                        this.closest('form').submit();">
+
+                                <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                            </a>
+                        </form>
 
                     </div>
                 </li>
