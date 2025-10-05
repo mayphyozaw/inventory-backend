@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Repositories\Contracts\BaseRepository;
 use Illuminate\Http\Request;
@@ -13,7 +14,7 @@ class ProductRepository implements BaseRepository
 
     public function __construct()
     {
-        $this->model = ProductCategory::class;
+        $this->model = Product::class;
     }
 
     public function find($id)
@@ -44,20 +45,52 @@ class ProductRepository implements BaseRepository
 
     public function productDatatable(Request $request)
     {
-        $model = $this->model::query();
+        $model = $this->model::query()
+            ->with(['productImages', 'warehouse']);
 
         return DataTables::eloquent($model)
-            ->addIndexColumn() 
-            ->editColumn('category_slug', function ($productCategory) {
-            return strtolower(str_replace(' ', '-', $productCategory->category_name));
+            ->addIndexColumn()
+
+            ->editColumn('image', function ($product) {
+                if ($product->productImages->isNotEmpty()) {
+                    $images = '';
+                    foreach ($product->productImages as $key => $image) {
+                        $imagePath = $image->acsrImagePath;
+                        $images .= '<img src="' . e($imagePath) . '" alt="Brand Image" 
+                        style="width:40px; height:40px; object-fit:cover; border-radius:4px;">';
+                    }
+                    return $images;
+                }
+
+                return '<img src="' . asset('upload/no_image.jpg') . '" width="50" style="margin-right:5px; border-radius:5px;">';
             })
-            ->addColumn('action', function ($productCategory) {
-                return view('admin.backend.productCategory._action', compact('productCategory'))->render();
+
+            ->editColumn('warehouse', function ($product) {
+                return $product->warehouse->name ?? '';
             })
+
+            ->filterColumn('warehouse', function ($query, $keyword) {
+                $query->whereHas('warehouse', function ($q1) use ($keyword) {
+                    $q1->where('name', 'LIKE', "%$keyword%");
+                });
+            })
+
+            ->addColumn('stock_alert', function ($product) {
+                if ($product->product_qty < $product->stock_alert) {
+                    return "<span class='btn btn-danger btn-sm'>Less qty</span>";
+                }
+                return "<span class='btn btn-success btn-sm'>In stock</span>";
+            })
+
+            ->addColumn('action', function ($product) {
+                return view('admin.backend.product._action', compact('product'))->render();
+            })
+
             ->addColumn('responsive-icon', function () {
                 return null;
             })
-            ->rawColumns(['action'])
+
+            ->rawColumns(['image', 'stock_alert', 'action'])
             ->make(true);
     }
 }

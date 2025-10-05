@@ -15,7 +15,7 @@
 
                 <div class="text-end">
                     <ol class="breadcrumb m-0 py-0">
-                        <li class="breadcrumb-item"><a href="{{ route('customer.index') }}">Product Category</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('category.index') }}"> Category</a></li>
                         <li class="breadcrumb-item active">Update Category</li>
                     </ol>
                 </div>
@@ -30,12 +30,12 @@
                         </div><!-- end card header -->
 
                         <div class="card-body">
-                            <form class="row g-3" action="{{ route('product.update', $productCategory->id) }}" method="post" enctype="multipart/form-data" id="submit-form">
+                            <form class="row g-3" action="{{ route('category.update', $category->id) }}" method="post" enctype="multipart/form-data" id="submit-form">
                                 @csrf
                                 @method('PUT')
                                 <div class="col-md-12">
                                     <label for="validationDefault01" class="form-label">Category Name</label>
-                                    <input type="text" class="form-control" name="category_name" value="{{ $productCategory->category_name }}">
+                                    <input type="text" class="form-control" name="category_name" value="{{ $category->category_name }}">
                                 </div>
                                 
                                 <div class="col-12">

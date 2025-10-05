@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\Backend\BrandController;
+use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\CustomerController;
 use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\SupplierController;
@@ -52,6 +53,9 @@ Route::middleware('auth')->group(function (){
     Route::resource('customer', CustomerController::class);
     Route::get('customer-datatable', [CustomerController::class, 'customerDatatable'])->name('customer-datatable');
     
+    Route::resource('category', CategoryController::class);
+    Route::get('category-datatable', [CategoryController::class, 'categoryDatatable'])->name('category-datatable');
+
     Route::resource('product', ProductController::class);
     Route::get('product-datatable', [ProductController::class, 'productDatatable'])->name('product-datatable');
 });

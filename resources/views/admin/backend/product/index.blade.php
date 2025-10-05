@@ -1,21 +1,22 @@
 @extends('admin.admin_main')
-@section('title', 'Category')
+@section('title', 'Product')
 @section('admin')
     <div class="content">
 
         <div class="container">
             <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
                 <div class="flex-grow-1">
+
                     <ol class="breadcrumb m-0 py-0">
-                        <li class="breadcrumb-item"><a href="javascript: void(0);">Product Category</a></li>
-                        <li class="breadcrumb-item active">All Category Tables</li>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Products</a></li>
+                        <li class="breadcrumb-item active">All Products Tables</li>
                     </ol>
+
                 </div>
 
                 <div class="text-end">
-                    <x-create-button href="{{ route('category.create') }}" data-bs-toggle="modal"
-                        data-bs-target="#standard-modal">
-                        Create Category
+                    <x-create-button href="{{ route('product.create') }}">
+                        Create Product
                     </x-create-button>
                 </div>
             </div>
@@ -25,17 +26,20 @@
                     <div class="card">
 
                         <div class="card-header">
-                            <h5 class="card-title mb-0">All Categories</h5>
-                        </div><!-- end card header -->
+                            <h5 class="card-title mb-0">All Products</h5>
+                        </div>
 
                         <div class="card-body">
                             <table id="datatable"
-                                class="table categoryTable table-bordered dt-responsive table-responsive nowrap">
+                                class="table productTable table-bordered dt-responsive table-responsive nowrap">
                                 <thead>
                                     <tr>
-                                        <th class="text-start">St</th>
-                                        <th class="text-start">Category Name</th>
-                                        <th class="text-start">Category Slug</th>
+                                        <th class="text-start">#</th>
+                                        <th class="text-start">Image</th>
+                                        <th class="text-start">Name</th>
+                                        <th class="text-start">Warehouse</th>
+                                        <th class="text-start">Price</th>
+                                        <th class="text-start">In Stock</th>
                                         <th class="text-start">Action</th>
                                     </tr>
                                 </thead>
@@ -48,42 +52,18 @@
             </div>
         </div>
     </div>
-
-    <div class="modal fade" id="standard-modal" tabindex="-1" aria-labelledby="standard-modalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="standard-modalLabel">Product Category</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form action="{{ route('category.store') }}" method="post" enctype="multipart/form-data"
-                        id="submit-form">
-                        @csrf
-                        <div class="col-md-12">
-                            <label for="validationDefault01" class="form-label">Category name</label>
-                            <input type="text" class="form-control" name="category_name" required>
-                        </div>
-                </div>
-                <div class="modal-footer">
-
-                    <button type="submit" class="btn btn-primary">Save</button>
-                </div>
-                </form>
-            </div>
-        </div>
-    </div>
 @endsection
 
+
 @push('scripts')
-        {!! JsValidator::formRequest('App\Http\Requests\Product\ProductCategoryStoreRequest', '#submit-form') !!}
     <script>
         $(document).ready(function() {
-            var table = $('.categoryTable').DataTable({
+            var table = $('.productTable').DataTable({
                 processing: true,
                 serverSide: true,
+                searchable: true,
                 ajax: {
-                    url: "{{ route('category-datatable') }}",
+                    url: "{{ route('product-datatable') }}",
                     type: 'GET'
                 },
                 columns: [{
@@ -93,15 +73,39 @@
                         orderable: false,
                         searchable: false
                     },
+
                     {
-                        data: 'category_name',
-                        name: 'category_name',
+                        data: 'image',
+                        name: 'image',
                         className: 'text-start'
                     },
+
                     {
-                        data: 'category_slug',
-                        name: 'category_slug',
+                        data: 'name',
+                        name: 'name',
                         className: 'text-start'
+                    },
+
+                    {
+                        data: 'warehouse',
+                        name: 'warehouse',
+                        className: 'text-start',
+                        orderable: false,
+                        searchable: true
+                    },
+
+                    {
+                        data: 'price',
+                        name: 'price',
+                        className: 'text-start'
+                    },
+
+                    {
+                        data: 'stock_alert',
+                        name: 'stock_alert',
+                        className: 'text-start',
+                        orderable: false,
+                        searchable: false
                     },
 
                     {
@@ -112,7 +116,6 @@
                         searchable: false
                     }
                 ],
-
                 responsive: true
             });
 
@@ -151,6 +154,4 @@
             })
         });
     </script>
-   
-   
 @endpush

@@ -10,4 +10,10 @@ class ProductCategory extends Model
         'category_name',
         'category_slug',
     ];
+
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
 }

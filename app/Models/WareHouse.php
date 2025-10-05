@@ -13,4 +13,8 @@ class WareHouse extends Model
         'city',
     ];
 
+    public function product()
+    {
+        return $this->hasMany(Product::class);
+    }
 }

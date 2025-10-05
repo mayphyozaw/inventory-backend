@@ -3,9 +3,14 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Product\ProductCategoryStoreRequest;
-use App\Http\Requests\Product\ProductCategoryUpdateRequest;
+use App\Http\Requests\Product\ProductStoreRequest;
+use App\Http\Requests\Product\ProductUpdateRequest;
+use App\Models\Brand;
+use App\Models\Product;
 use App\Models\ProductCategory;
+use App\Models\ProductImage;
+use App\Models\Supplier;
+use App\Models\WareHouse;
 use App\Repositories\ProductRepository;
 use App\Services\ResponseService;
 use Exception;
@@ -21,59 +26,83 @@ class ProductController extends Controller
     {
         $this->productRepository = $productRepository;
     }
-    
+
     public function index()
     {
-        $productCategory = ProductCategory::all();
-        return view('admin.backend.productCategory.index',compact('productCategory'));
+        $product = Product::orderBy('id', 'desc')->get();
+        return view('admin.backend.product.index', compact('product'));
     }
 
     public function create()
     {
-        return view('admin.backend.productCategory.create');
+        $categories = ProductCategory::all();
+        $brands = Brand::all();
+        $warehouses = WareHouse::all();
+        $suppliers = Supplier::all();
+
+        return view('admin.backend.product.create', compact('categories', 'brands', 'warehouses', 'suppliers'));
     }
 
-    public function store(ProductCategoryStoreRequest $request)
+    public function store(ProductStoreRequest $request)
     {
-        DB::beginTransaction();
 
         try {
-            $this->productRepository->create([
-                'category_name'  => $request->category_name,
-                'category_slug'  => strtolower(str_replace('', '-',
-                $request->category_name)),
+            $product = $this->productRepository->create([
+                'name'  => $request->name,
+                'code'  => $request->code,
+                'category_id' => $request->category_id,
+                'brand_id' => $request->brand_id,
+                'warehouse_id' => $request->warehouse_id,
+                'supplier_id' => $request->supplier_id,
+                'price' => $request->price,
+                'stock_alert' => $request->stock_alert,
+                'note' => $request->note,
+                'product_qty' => $request->product_qty,
+                'discount' => $request->discount ?? null,
+                'status' => $request->status ?? null,
+                'active' => 'pending',
             ]);
 
-            DB::commit();
+
+            if ($request->hasFile('images')) {
+                $product_img_files = $request->file('images');
+                foreach ($product_img_files as $key => $product_img_file) {
+                    $product_img_name = uniqid() . '_' . time() . '.' . $product_img_file->getClientOriginalExtension();
+                    $product_img_file->move(public_path('upload/product_images'), $product_img_name);
+
+                    $product_img = new ProductImage();
+                    $product_img->product_id = $product->id;
+                    $product_img->image = $product_img_name;
+                    $product_img->save();
+                }
+            }
+
             return Redirect::route('product.index')->with('success', 'Successfully created');
         } catch (Exception $e) {
-            DB::rollBack();
             return back()->with('error', $e->getMessage())->withInput();
         }
     }
 
     public function productDatatable(Request $request)
     {
-        if ($request->ajax()) {
-            return $this->productRepository->productDatatable($request);
-        }
+        return $this->productRepository->productDatatable($request);
     }
 
 
     public function edit($id)
     {
-        $productCategory = ProductCategory::findOrFail($id);
-        return view('admin.backend.productCategory.edit', compact('productCategory')); 
+        $product = Product::findOrFail($id);
+        return view('admin.backend.product.edit', compact('product'));
     }
 
-    public function update(ProductCategoryUpdateRequest $request, $id)
+    public function update(ProductUpdateRequest $request, $id)
     {
         DB::beginTransaction();
 
         try {
             $this->productRepository->update($id, [
                 'category_name'  => $request->category_name,
-                
+
             ]);
             DB::commit();
             return redirect()->route('product.index')->with([
@@ -97,6 +126,4 @@ class ProductController extends Controller
             return ResponseService::fail($e->getMessage());
         }
     }
-
-    
 }

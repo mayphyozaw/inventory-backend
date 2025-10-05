@@ -129,7 +129,10 @@
                     <div class="collapse" id="sidebarAuth">
                         <ul class="nav-second-level">
                             <li>
-                                <a href="{{route('product.index')}}" class="tp-link">All Product Category</a>
+                                <a href="{{route('category.index')}}" class="tp-link">All Categories</a>
+                            </li>
+                            <li>
+                                <a href="{{route('product.index')}}" class="tp-link">All Products</a>
                             </li>
                             
                         </ul>
