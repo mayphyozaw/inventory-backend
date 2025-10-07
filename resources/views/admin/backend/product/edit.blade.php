@@ -1,12 +1,12 @@
 @extends('admin.admin_main')
-@section('title', 'Create Product')
+@section('title', 'Edit Product')
 @section('admin')
     <div class="content d-flex flex-column flex-column-fluid">
         <div class="d-flex flex-column-fluid">
             <div class="container-fluid my-0">
                 <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
                     <div class="flex-grow-1">
-                        <h4 class="fs-18 fw-semibold m-0">Create Product</h4>
+                        <h4 class="fs-18 fw-semibold m-0">Edit Product</h4>
                     </div>
                     <div class="text-end">
                         <ol class="breadcrumb m-0 py-0">
@@ -16,9 +16,10 @@
                 </div>
                 <div class="card">
                     <div class="card-body">
-                        <form action="{{ route('product.store') }}" method="post" enctype="multipart/form-data"
-                            id="submit-form">
+                        <form action="{{ route('product.update', $productEditData->id) }}" method="post"
+                            enctype="multipart/form-data" id="submit-form">
                             @csrf
+                            @method('PUT')
                             <div class="row">
                                 <div class="col-xl-8">
                                     <div class="row">
@@ -28,7 +29,7 @@
                                                 <span class="text-danger">*</span>
                                             </label>
                                             <input type="text" class="form-control" name="name"
-                                                placeholder="Enter Name" required>
+                                                value="{{ $productEditData->name }}">
                                         </div>
 
                                         <div class="col-md-6 mb-3">
@@ -37,7 +38,7 @@
                                                 <span class="text-danger">*</span>
                                             </label>
                                             <input type="text" class="form-control" name="code"
-                                                placeholder="Enter Code" required>
+                                                value="{{ $productEditData->code }}">
                                         </div>
 
                                         <div class="col-md-6 mb-3">
@@ -50,7 +51,9 @@
                                                     class="form-control form-select">
                                                     <option value="">Select Category</option>
                                                     @foreach ($categories as $item)
-                                                        <option value="{{ $item->id }}">{{ $item->category_name }}
+                                                        <option value="{{ $item->id }}"
+                                                            {{ $item->id === $productEditData->category_id ? 'selected' : '' }}>
+                                                            {{ $item->category_name }}
                                                         </option>
                                                     @endforeach
                                                 </select>
@@ -66,7 +69,9 @@
                                                 <select name="brand_id" id="brand_id" class="form-control form-select">
                                                     <option value="">Select Brand</option>
                                                     @foreach ($brands as $item)
-                                                        <option value="{{ $item->id }}">{{ $item->name }}
+                                                        <option value="{{ $item->id }}"
+                                                            {{ $item->id === $productEditData->brand_id ? 'selected' : '' }}>
+                                                            {{ $item->name }}
                                                         </option>
                                                     @endforeach
                                                 </select>
@@ -78,7 +83,7 @@
                                                 Product Price:
                                             </label>
                                             <input type="text" class="form-control" name="price"
-                                                placeholder="Enter Product Price" required>
+                                                value="{{ $productEditData->price }}">
                                         </div>
 
                                         <div class="col-md-6 mb-3">
@@ -87,32 +92,55 @@
                                                 <span class="text-danger">*</span>
                                             </label>
                                             <input type="number" class="form-control" name="stock_alert"
-                                                placeholder="Enter Stock Alert" min="0" required>
+                                                value="{{ $productEditData->stock_alert }}" min="0">
                                         </div>
 
                                         <div class="col-md-12">
                                             <label class="form-label">
                                                 Notes:
                                             </label>
-                                            <textarea class="form-control" name="note" rows="3" placeholder="Enter Notes"></textarea>
+                                            <textarea class="form-control" name="note" rows="3" value="{{ $productEditData->note }}"></textarea>
                                         </div>
                                     </div>
                                 </div>
 
+
                                 <div class="col-xl-4">
-                                    <label class="form-label">
-                                        Multiple Image:
-                                        <span class="text-danger">*</span>
-                                    </label>
+                                    <div class="card" style="padding:10px;">
+                                        <label class="form-label">
+                                            Multiple Image:
+                                            <span class="text-danger">*</span>
+                                        </label>
 
-                                    <div class="mb-3">
-                                        <input name="images[]" accept=".png, .jpg, .jpeg" multiple="" type="file"
-                                            id="multiImg" class="upload-input-file form-control" />
+                                        <div class="mb-3">
+                                            <input name="images[]" accept=".png, .jpg, .jpeg" multiple="" type="file"
+                                                id="multiImg" class="upload-input-file form-control" />
+                                        </div>
+
+                                        <div class="row">
+                                            <div id="preview_img"></div>
+                                            @if ($multiImages->isNotEmpty())
+                                                @foreach ($multiImages as $img)
+                                                    <div class="col-md-3 mb-2">
+                                                        <img src="{{ asset('upload/product_images/' . $img->image) }}"
+                                                            alt="Product Image" class="img-thumbnail"
+                                                            style="width:110px; height:60px;">
+
+                                                        <div class="form-check mt-1">
+                                                            <input type="checkbox" class="form-check-input"
+                                                                name="remove_images[]" value="{{ $img->id }}"
+                                                                id="remove_image_{{ $img->id }}">
+                                                            <label for="remove_image_{{ $img->id }}"
+                                                                class="form-check-label">
+                                                                Remove
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                            @endif
+                                        </div>
                                     </div>
 
-                                    <div class="row">
-                                        <div id="preview_img"></div>
-                                    </div>
 
                                     <div>
                                         <div class="col-md-12 mb-3">
@@ -129,7 +157,8 @@
                                                     class="form-control form-select">
                                                     <option value="">Select WareHouse</option>
                                                     @foreach ($warehouses as $item)
-                                                        <option value="{{ $item->id }}">
+                                                        <option value="{{ $item->id }}"
+                                                            {{ $item->id === $productEditData->warehouse_id ? 'selected' : '' }}>
                                                             {{ $item->name }}
                                                         </option>
                                                     @endforeach
@@ -147,7 +176,8 @@
                                                     class="form-control form-select">
                                                     <option value="">Select Supplier</option>
                                                     @foreach ($suppliers as $item)
-                                                        <option value="{{ $item->id }}">
+                                                        <option value="{{ $item->id }}"
+                                                            {{ $item->id === $productEditData->supplier_id ? 'selected' : '' }}>
                                                             {{ $item->name }}
                                                         </option>
                                                     @endforeach
@@ -161,8 +191,8 @@
                                                 Product Quantity:
                                                 <span class="text-danger">*</span>
                                             </label>
-                                            <input type="number" class="form-control" name="product_qty"
-                                                placeholder="Enter Product Quantity" min="1" required>
+                                            <input type="number" class="form-control" name="product_qty" min="1"
+                                                value="{{ $productEditData->product_qty }}">
                                         </div>
 
                                         <div class="col-md-12">
@@ -171,8 +201,12 @@
                                                         class="text-danger">*</span></label>
                                                 <select name="status" id="status" class="form-control form-select">
                                                     <option selected="">Select Status</option>
-                                                    <option value="Received">Received</option>
-                                                    <option value="Pending">Pending</option>
+                                                    <option value="Received"
+                                                        {{ isset($productEditData->status) && $productEditData->status == 'Received' ? 'selected' : '' }}>
+                                                        Received</option>
+                                                    <option value="Pending"
+                                                        {{ isset($productEditData->status) && $productEditData->status == 'Pending' ? 'selected' : '' }}>
+                                                        Pending</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -195,11 +229,11 @@
         </div>
     </div>
 
-
-
 @endsection
 @push('scripts')
-    <script>
+    {!! JsValidator::formRequest('App\Http\Requests\Product\ProductUpdateRequest', '#submit-form') !!}
+
+     <script>
         document.getElementById("multiImg").addEventListener("change", function(event) {
             const previewContainer = document.getElementById("preview_img");
             previewContainer.innerHTML = ""; // Clear previous previews
@@ -262,6 +296,4 @@
             }
         });
     </script>
-
-    {!! JsValidator::formRequest('App\Http\Requests\Product\ProductStoreRequest', '#submit-form') !!}
 @endpush

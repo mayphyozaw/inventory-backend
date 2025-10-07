@@ -60,7 +60,7 @@ class ProductController extends Controller
                 'product_qty' => $request->product_qty,
                 'discount' => $request->discount ?? null,
                 'status' => $request->status ?? null,
-                'active' => 'pending',
+                // 'active' => 'pending',
             ]);
 
 
@@ -85,32 +85,67 @@ class ProductController extends Controller
 
     public function productDatatable(Request $request)
     {
-        return $this->productRepository->productDatatable($request);
+        if ($request->ajax()) {
+            return $this->productRepository->productDatatable($request);
+        }
     }
 
 
     public function edit($id)
     {
-        $product = Product::findOrFail($id);
-        return view('admin.backend.product.edit', compact('product'));
+        $productEditData = Product::findOrFail($id);
+        $categories = ProductCategory::all();
+        $brands = Brand::all();
+        $warehouses = WareHouse::all();
+        $suppliers = Supplier::all();
+        $multiImages = ProductImage::where('product_id', $id)->get();
+
+        return view('admin.backend.product.edit', compact('productEditData', 'categories', 'brands', 'warehouses', 'suppliers', 'multiImages'));
     }
 
     public function update(ProductUpdateRequest $request, $id)
     {
-        DB::beginTransaction();
 
         try {
             $this->productRepository->update($id, [
-                'category_name'  => $request->category_name,
-
+                'name'  => $request->name,
+                'code'  => $request->code,
+                'category_id' => $request->category_id,
+                'brand_id' => $request->brand_id,
+                'warehouse_id' => $request->warehouse_id,
+                'supplier_id' => $request->supplier_id,
+                'price' => $request->price,
+                'stock_alert' => $request->stock_alert,
+                'note' => $request->note,
+                'product_qty' => $request->product_qty,
+                'discount' => $request->discount ?? null,
+                'status' => $request->status ?? null,
             ]);
-            DB::commit();
+
+            if ($request->remove_images) {
+                foreach ($request->remove_images as $remove_img) {
+                    $product = ProductImage::findOrFail($remove_img);
+                    $product->delete();
+                }
+            }
+            if ($request->hasFile('images')) {
+                $product_img_files = $request->file('images');
+                foreach ($product_img_files as $key => $product_img_file) {
+                    $product_img_name = uniqid() . '_' . time() . '.' . $product_img_file->getClientOriginalExtension();
+                    $product_img_file->move(public_path('upload/product_images'), $product_img_name);
+
+                    $product_img = new ProductImage();
+                    $product_img->product_id = $id;
+                    $product_img->image = $product_img_name;
+                    $product_img->save();
+                }
+            }
+
             return redirect()->route('product.index')->with([
                 'message' => 'Supplier updated successfully!',
                 'alert-type' => 'success'
             ]);
         } catch (Exception $e) {
-            DB::rollBack();
             return back()->with('error', $e->getMessage())->withInput();
         }
     }
@@ -120,10 +155,16 @@ class ProductController extends Controller
     {
         try {
             $this->productRepository->delete($id);
-
             return ResponseService::success([], 'Successfully deleted');
         } catch (Exception $e) {
             return ResponseService::fail($e->getMessage());
         }
+    }
+
+    public function show($id)
+    {
+        $product = $this->productRepository->find($id);
+        $product->load('productImages');
+        return view('admin.backend.product.show', compact('product'));
     }
 }

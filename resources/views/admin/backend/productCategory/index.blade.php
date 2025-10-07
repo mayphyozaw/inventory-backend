@@ -76,7 +76,7 @@
 @endsection
 
 @push('scripts')
-        {!! JsValidator::formRequest('App\Http\Requests\Product\ProductCategoryStoreRequest', '#submit-form') !!}
+        {!! JsValidator::formRequest('App\Http\Requests\Category\CategoryStoreRequest', '#submit-form') !!}
     <script>
         $(document).ready(function() {
             var table = $('.categoryTable').DataTable({

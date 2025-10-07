@@ -56,6 +56,6 @@
 
     
     @push('scripts')
-        {!! JsValidator::formRequest('App\Http\Requests\Product\ProductCategoryUpdateRequest', '#submit-form') !!}
+        {!! JsValidator::formRequest('App\Http\Requests\Category\CategoryUpdateRequest', '#submit-form') !!}
     @endpush
 @endsection
