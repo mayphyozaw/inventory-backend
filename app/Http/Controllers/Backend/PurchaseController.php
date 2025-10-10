@@ -5,11 +5,14 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Purchase;
+use App\Models\PurchaseItem;
 use App\Models\Supplier;
 use App\Models\WareHouse;
 use App\Repositories\PurchaseRepository;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class PurchaseController extends Controller
 {
@@ -49,30 +52,6 @@ class PurchaseController extends Controller
             ->limit(10)
             ->get();
         return response()->json($products);
-
-        // $products = $this->purchaseRepository->queryById($product)
-        //     ->when($request->search, function ($q) use ($request) {
-        //         $q->where('name', 'LIKE', "%$request->search%")
-        //             ->orWhere('code', 'LIKE', "%$request->search%");
-        //     })
-        //     ->when($warehouse_id, function ($q) use ($warehouse_id) {
-        //         $q->where('warehouse_id', $warehouse_id);
-        //     })
-        //     ->select('id', 'name', 'code', 'price', 'product_qty')
-        //     ->limit(10)
-        //     ->get();
-        // return response()->json($products);
-
-        // $warehouse = Auth::guard('web')->warehouse();
-        // $purchaseProducts = $this->purchaseRepository->queryById($warehouse)
-        //     ->when($request->search, function ($q1) use ($request) {
-        //         $q1->where('trx_id', 'LIKE', "%$request->search%")
-        //             ->orWhere('amount', 'LIKE', "%$request->search%")
-        //             ->orWhere('created_at', 'LIKE', "%$request->search%");
-        //     })
-        //     ->orderByDesc('id')
-        //     ->paginate(10);
-        // return TicketResource::collection($tickets)->additional(['message' => 'success']);
     }
 
 
@@ -80,6 +59,65 @@ class PurchaseController extends Controller
     {
         if ($request->ajax()) {
             return $this->purchaseRepository->purchaseDatatable($request);
+        }
+    }
+
+    public function store(Request $request)
+    {
+
+        $request->validate([
+            'date' => 'required|date',
+            'status' => 'required',
+            'supplier_id' => 'required',
+        ]);
+
+        try {
+
+            $purchase = Purchase::create([
+                'date' => $request->date,
+                'warehouse_id' => $request->warehouse_id,
+                'supplier_id' => $request->supplier_id,
+                'discount' => $request->discount ?? 0,
+                'shipping' => $request->shipping ?? 0,
+                'status' => $request->status,
+                'note' => $request->note ?? '',
+                'grand_total' => $request->grand_total,
+            ]);
+
+            $grandTotal = 0;
+
+            foreach ($request->products as $productData) {
+                $product = Product::findOrFail($productData['id']);
+                $netUnitCost = $product['net_unit_cost'] ?? $product->price;
+
+                if($netUnitCost === null){
+                    throw new \Exception("Net Unit Cost is missing for the product id" . $productData['id']);
+                }
+
+                $subtotal = ($netUnitCost * $productData['quantity']) - ($productData['discount'] ?? 0);
+                $grandTotal += $subtotal;
+
+                PurchaseItem::create([
+                    'purchase_id' => $purchase->id,
+                    'product_id' => $productData['id'],
+                    'net_unit_cost' => $netUnitCost,
+                    'stock' => $product->product_qty + $productData['quantity'],
+                    'quantity' => $productData['quantity'],
+                    'discount' => $productData['discount'],
+                    'subtotal' => $subtotal,
+                ]); 
+
+                $product->increment('product_qty', $productData['quantity']);
+            }
+
+            $purchase->update(['grand_total' => $grandTotal + $request->shipping - $request->discount]);
+            
+            return redirect()->route('purchase.index')->with([
+                'message' => 'Purchase Stored successfully!',
+                'alert-type' => 'success'
+            ]);
+        } catch (Exception $e) {
+            return back()->with('error', $e->getMessage())->withInput();
         }
     }
 }

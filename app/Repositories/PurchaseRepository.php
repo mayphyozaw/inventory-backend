@@ -17,7 +17,7 @@ class PurchaseRepository implements BaseRepository
     public function __construct()
     {
         $this->model = Purchase::class;
-        
+        return  $this->model = Purchase::class;
     }
 
     public function find($id)
@@ -67,7 +67,11 @@ class PurchaseRepository implements BaseRepository
                 return $purchase->warehouse_id ?? '';
             })
             ->editColumn('status', function ($purchase) {
-                return '<span style="color: #' . $purchase->acsrStatus['color'] . '">' . $purchase->acsrStatus['text'] . '</span>';
+                
+                return '<span class="badge" style="background-color:#' . $purchase->acsrStatus['color'] . '; color:#fff;">' . $purchase->acsrStatus['text'] . '</span>';
+            })
+            ->editColumn('payment', function ($purchase) {
+                return 'cash';
             })
             ->editColumn('grand_total', function ($purchase) {
                 return number_format($purchase->grand_total);

@@ -16,6 +16,7 @@ class Purchase extends Model
         'discount',
         'status',
         'create_at',
+        'shipping',
     ];
 
     public function purchaseItem()
@@ -39,19 +40,19 @@ class Purchase extends Model
         return Attribute::make(
             get: function (mixed $value, array $attributes){
                 switch ($attributes['status']) {
-                    case 'pending':
+                    case 'Pending':
                         $text = 'Pending';
+                        $color = 'dc2626';
+                        break;
+
+                    case 'Ordered':
+                        $text = 'Ordered';
                         $color = 'ea580c';
                         break;
 
-                    case 'ordered':
-                        $text = 'Ordered';
-                        $color = '16a34a';
-                        break;
-
-                    case 'received':
+                    case 'Received':
                         $text = 'Received';
-                        $color = 'dc2626';
+                        $color = '16a34a';
                         break;
                         
                     default:

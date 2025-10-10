@@ -141,7 +141,7 @@
 
                                                             <tr class="d-none">
                                                                 <td class="py-3">Paid Amount</td>
-                                                                <td class="py-3" id="paidAmount">
+                                                                <td class="py-3" id="paidAmount"> 
                                                                     <input type="text" name="paid_amount"
                                                                         placeholder="Enter amount paid"
                                                                         class="form-control">
@@ -207,9 +207,9 @@
                 </div>
 
                 <div class="col-xl-12">
-                    <div class="d-flex mt-5 justify-content-start">
+                    <div class="d-flex mt-5 justify-content-end">
                         <button class="btn btn-primary me-3" type="submit">Save</button>
-                        <a class="btn btn-secondary" href="{{ route('product.index') }}">Cancel</a>
+                        <a class="btn btn-secondary" href="{{ route('purchase.index') }}">Cancel</a>
                     </div>
                 </div>
             </div>

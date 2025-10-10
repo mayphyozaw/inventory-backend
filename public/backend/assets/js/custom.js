@@ -97,13 +97,13 @@ document.addEventListener("DOMContentLoaded", function () {
                         data-bs-toggle="modal"> 
                         <i class="fa fa-file-pen"></i>
                         </button>
-                        <input type="hidden" name="products[${productId}][id]" value="${productId}"
-                        <input type="hidden" name="products[${productId}][id]" value="${productName}"
-                        <input type="hidden" name="products[${productId}][id]" value="${productCode}"
+                        <input type="hidden" name="products[${productId}][id]" value="${productId}" />
+                        <input type="hidden" name="products[${productId}][name]" value="${productName}" />
+                        <input type="hidden" name="products[${productId}][code]" value="${productCode}" />
                 </td>
 
                 <td>${netUnitCost.toFixed(2)}
-                    <input type="hidden" name="products[${productId}][id]" value="${netUnitCost}"
+                    <input type="hidden" name="products[${productId}][net_unit_cost]" value="${netUnitCost}" />
                 </td>
 
                 <td style="color:#ffc121">${stock}</td>

@@ -7,19 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 class PurchaseItem extends Model
 {
     protected $fillable = [
-        'category_id',
-        'brand_id',
-        'warehouse_id',
-        'supplier_id',
-        'name',
-        'code',
-        'image',
-        'price',
-        'stock_alert',
-        'note',
-        'product_qty',
+
+        'id',
+        'purchase_id',
+        'product_id',
+        'net_unit_cost',
+        'stock',
+        'quantity',
         'discount',
-        'status',
+        'subtotal',
     ];
 
     public function purchase()
