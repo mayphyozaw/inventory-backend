@@ -29,7 +29,11 @@ class ProductRepository implements BaseRepository
         return $record;
     }
 
-
+    public function queryById($product)
+    {
+        return $this->model::where('product_id',$product->id);
+    }
+    
     public function update($id, array $data)
     {
         $record = $this->model::find($id);

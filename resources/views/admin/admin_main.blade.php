@@ -82,6 +82,7 @@
 
 
     <script src="{{ asset('backend/assets/js/code.js') }}"></script>
+    <script src="{{ asset('backend/assets/js/custom.js') }}"></script>
 
 
     <!-- App js -->

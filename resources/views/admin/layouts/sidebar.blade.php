@@ -56,12 +56,12 @@
 
 
                 <li>
-                    <a href="#sidebarAuth" data-bs-toggle="collapse">
+                    <a href="#brand" data-bs-toggle="collapse">
                         <i data-feather="users"></i>
                         <span> Brand Manage </span>
                         <span class="menu-arrow"></span>
                     </a>
-                    <div class="collapse" id="sidebarAuth">
+                    <div class="collapse" id="brand">
                         <ul class="nav-second-level">
                             <li>
                                 <a href="{{route('brand.index')}}" class="tp-link">All Brands</a>
@@ -73,12 +73,12 @@
 
 
                 <li>
-                    <a href="#sidebarAuth" data-bs-toggle="collapse">
+                    <a href="#warehouse" data-bs-toggle="collapse">
                         <i data-feather="users"></i>
                         <span> Warehouse Manage </span>
                         <span class="menu-arrow"></span>
                     </a>
-                    <div class="collapse" id="sidebarAuth">
+                    <div class="collapse" id="warehouse">
                         <ul class="nav-second-level">
                             <li>
                                 <a href="{{route('warehouse.index')}}" class="tp-link">All WareHouses</a>
@@ -89,12 +89,12 @@
                 </li>
 
                 <li>
-                    <a href="#sidebarAuth" data-bs-toggle="collapse">
+                    <a href="#supplier" data-bs-toggle="collapse">
                         <i data-feather="users"></i>
                         <span> Supplier Manage </span>
                         <span class="menu-arrow"></span>
                     </a>
-                    <div class="collapse" id="sidebarAuth">
+                    <div class="collapse" id="supplier">
                         <ul class="nav-second-level">
                             <li>
                                 <a href="{{route('supplier.index')}}" class="tp-link">All Suppliers</a>
@@ -105,12 +105,12 @@
                 </li>
 
                 <li>
-                    <a href="#sidebarAuth" data-bs-toggle="collapse">
+                    <a href="#customer" data-bs-toggle="collapse">
                         <i data-feather="users"></i>
                         <span> Customer Manage </span>
                         <span class="menu-arrow"></span>
                     </a>
-                    <div class="collapse" id="sidebarAuth">
+                    <div class="collapse" id="customer">
                         <ul class="nav-second-level">
                             <li>
                                 <a href="{{route('customer.index')}}" class="tp-link">All Customers</a>
@@ -121,12 +121,12 @@
                 </li>
 
                 <li>
-                    <a href="#sidebarAuth" data-bs-toggle="collapse">
+                    <a href="#product" data-bs-toggle="collapse">
                         <i data-feather="users"></i>
                         <span> Product Manage </span>
                         <span class="menu-arrow"></span>
                     </a>
-                    <div class="collapse" id="sidebarAuth">
+                    <div class="collapse" id="product">
                         <ul class="nav-second-level">
                             <li>
                                 <a href="{{route('category.index')}}" class="tp-link">All Categories</a>
@@ -139,29 +139,21 @@
                     </div>
                 </li>
 
-                <li>
-                    <a href="#sidebarError" data-bs-toggle="collapse">
-                        <i data-feather="alert-octagon"></i>
-                        <span> Error Pages </span>
+               <li>
+                    <a href="#purchase" data-bs-toggle="collapse">
+                        <i data-feather="users"></i>
+                        <span> Purchase Manage </span>
                         <span class="menu-arrow"></span>
                     </a>
-                    <div class="collapse" id="sidebarError">
+                    <div class="collapse" id="purchase">
                         <ul class="nav-second-level">
                             <li>
-                                <a href="error-404.html" class="tp-link">Error 404</a>
+                                <a href="{{route('purchase.index')}}" class="tp-link">All Purchase</a>
                             </li>
                             <li>
-                                <a href="error-500.html" class="tp-link">Error 500</a>
+                                <a href="{{route('product.index')}}" class="tp-link">Purchase Return</a>
                             </li>
-                            <li>
-                                <a href="error-503.html" class="tp-link">Error 503</a>
-                            </li>
-                            <li>
-                                <a href="error-429.html" class="tp-link">Error 429</a>
-                            </li>
-                            <li>
-                                <a href="offline-page.html" class="tp-link">Offline Page</a>
-                            </li>
+                            
                         </ul>
                     </div>
                 </li>

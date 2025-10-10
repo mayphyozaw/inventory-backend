@@ -6,6 +6,7 @@ use App\Http\Controllers\Backend\BrandController;
 use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\CustomerController;
 use App\Http\Controllers\Backend\ProductController;
+use App\Http\Controllers\Backend\PurchaseController;
 use App\Http\Controllers\Backend\SupplierController;
 use App\Http\Controllers\Backend\WareHouseController;
 use App\Http\Controllers\PasswordController;
@@ -58,4 +59,9 @@ Route::middleware('auth')->group(function (){
 
     Route::resource('product', ProductController::class);
     Route::get('product-datatable', [ProductController::class, 'productDatatable'])->name('product-datatable');
+
+    Route::resource('purchase', PurchaseController::class);
+    Route::get('purchase-datatable', [PurchaseController::class, 'purchaseDatatable'])->name('purchase-datatable');
+    Route::get('/purchase/product/search', [PurchaseController::class, 'queryBySearch'])->name('purchase-product-search');
+
 });
