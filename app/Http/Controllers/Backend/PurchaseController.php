@@ -90,7 +90,7 @@ class PurchaseController extends Controller
                 $product = Product::findOrFail($productData['id']);
                 $netUnitCost = $product['net_unit_cost'] ?? $product->price;
 
-                if($netUnitCost === null){
+                if ($netUnitCost === null) {
                     throw new \Exception("Net Unit Cost is missing for the product id" . $productData['id']);
                 }
 
@@ -105,18 +105,88 @@ class PurchaseController extends Controller
                     'quantity' => $productData['quantity'],
                     'discount' => $productData['discount'],
                     'subtotal' => $subtotal,
-                ]); 
+                ]);
 
                 $product->increment('product_qty', $productData['quantity']);
             }
 
             $purchase->update(['grand_total' => $grandTotal + $request->shipping - $request->discount]);
-            
+
             return redirect()->route('purchase.index')->with([
                 'message' => 'Purchase Stored successfully!',
                 'alert-type' => 'success'
             ]);
         } catch (Exception $e) {
+            return back()->with('error', $e->getMessage())->withInput();
+        }
+    }
+
+    public function edit($id)
+    {
+        $editPurchaseData = Purchase::with('purchaseItems.product')->findOrFail($id);
+        $suppliers = Supplier::all();
+        $warehouses = WareHouse::all();
+        return view('admin.backend.purchase.edit', compact('editPurchaseData', 'suppliers', 'warehouses'));
+    }
+
+    public function update(Request $request, $id)
+    {
+
+        $request->validate([
+            'date' => 'required|date',
+            'status' => 'required',
+            'supplier_id' => 'required',
+        ]);
+
+
+        try {
+
+            $purchase = Purchase::findOrFail($id);
+            $purchase->update([
+                'date' => $request->date,
+                'warehouse_id' => $request->warehouse_id,
+                'supplier_id' => $request->supplier_id,
+                'discount' => $request->discount ?? 0,
+                'shipping' => $request->shipping ?? 0,
+                'status' => $request->status,
+                'note' => $request->note ?? '',
+                'grand_total' => $request->grand_total,
+            ]);
+
+            $oldPurchaseItems = PurchaseItem::where('purchase_id', $purchase->id)->get();
+
+            foreach ($oldPurchaseItems as $oldItem) {
+                $product = Product::find($oldItem->product_id);
+                if ($product) {
+                    $product->decrement('product_qty', $oldItem->quantity);
+                }
+            }
+
+            PurchaseItem::where('purchase_id', $purchase->id)->delete();
+
+            foreach ($request->products as $product_id => $productData) {
+                PurchaseItem::create([
+                    'purchase_id' => $purchase->id,
+                    'product_id' => $product_id,
+                    'net_unit_cost' => $productData['net_unit_cost'],
+                    'stock' => $productData['stock'],
+                    'quantity' => $productData['quantity'],
+                    'discount' => $productData['discount'] ?? 0,
+                    'subtotal' => $productData['subtotal'],
+                ]);
+                //update
+
+                $product =  Product::find($product_id);
+                if ($product) {
+                    $product->increment('product_qty', $productData['quantity']);
+                }
+            }
+
+            return redirect()->route('purchase.index')->with([
+                'message' => 'Purchase Updatd successfully!',
+                'alert-type' => 'success'
+            ]);
+        } catch (\Exception $e) {
             return back()->with('error', $e->getMessage())->withInput();
         }
     }

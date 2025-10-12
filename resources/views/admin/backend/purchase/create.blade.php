@@ -174,12 +174,12 @@
                                     <div class="col-md-4">
                                         <label class="form-label">Discount: </label>
                                         <input type="number" id="inputDiscount" name="discount" class="form-control"
-                                            value="0.00">
+                                            value="TK 0.00">
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Shipping: </label>
                                         <input type="number" id="inputShipping" name="shipping" class="form-control"
-                                            value="0.00">
+                                            value="TK 0.00">
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group w-100">

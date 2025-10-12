@@ -1,6 +1,10 @@
-{{-- <x-edit-button href="{{ route('product.show', $product->id) }}" class="btn btn-warning btn-sm" title="Details">
+<x-edit-button href="{{ route('purchase.show', $purchase->id) }}" class="btn btn-warning btn-sm" title="Details">
     <i class="fa fa-eye"></i>
-</x-edit-button> --}}
+</x-edit-button>
+
+<x-edit-button href="{{ route('purchase.show', $purchase->id) }}" class="btn btn-primary btn-sm" title="PDF Invocie">
+    <i class="fa-solid fa-download"></i>
+</x-edit-button>
 
 
 <x-edit-button href="{{ route('purchase.edit', $purchase->id) }}" class="btn btn-info btn-sm" style="background-color:#1da0a3" title="Edit">
@@ -10,5 +14,5 @@
 
 
 <x-delete-button href="#" class="btn btn-danger btn-sm deleteBtn" data-url="{{ route('purchase.destroy',$purchase->id) }}" style="background-color: red" title="Delete">
-    <i class="fa fa-trash"></i>
+    <i class="fa fa-trash-can"></i>
 </x-delete-button>

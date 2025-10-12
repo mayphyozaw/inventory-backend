@@ -130,7 +130,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 <td>
                     <button class="btn btn-danger btn-sm remove-product" type="button">
-                        <span class="fa fa-trash" style="font-size:18px"></span>
+                        <span class="fa fa-trash-can" style="font-size:18px"></span>
                     </button>
                 </td>
             </tr>
@@ -249,7 +249,7 @@ document.addEventListener("DOMContentLoaded", function () {
         //Update grandtotal display
         document.getElementById(
             "grandTotal"
-        ).textContent = `TH ${grandTotal.toFixed(2)}`;
+        ).textContent = `TK ${grandTotal.toFixed(2)}`;
 
         document.querySelector("input[name = 'grand_total']").value =
             grandTotal.toFixed(2);

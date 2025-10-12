@@ -64,7 +64,7 @@ class PurchaseRepository implements BaseRepository
             })
             ->addIndexColumn()
             ->editColumn('warehouse', function ($purchase) {
-                return $purchase->warehouse_id ?? '';
+                return $purchase->warehouse->name ?? '';
             })
             ->editColumn('status', function ($purchase) {
                 
@@ -74,7 +74,7 @@ class PurchaseRepository implements BaseRepository
                 return 'cash';
             })
             ->editColumn('grand_total', function ($purchase) {
-                return number_format($purchase->grand_total);
+                return '$' . number_format($purchase->grand_total,2);
             })
             ->editColumn('created_at', function ($purchase) {
                 return Carbon::parse($purchase->created_at)->format("Y-m-d H:i:s");
