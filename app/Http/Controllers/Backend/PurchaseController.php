@@ -206,5 +206,30 @@ class PurchaseController extends Controller
         $pdf = Pdf::loadView('admin.backend.purchase.invoice_pdf',compact('purchase'));
         return $pdf->download('purchase_' . $id. '.pdf');
     }
+
+    public function destroy($id)
+    {
+        try {
+            $purchase = Purchase::findOrFail($id);
+            $purchaseItems = PurchaseItem::where('purchase_id',$id)->get();
+
+            foreach ($purchaseItems as $item) {
+                $product = Product::find($item->product_id);
+                if($product){
+                    $product->decrement('product_qty',$item->quantity);
+                }
+            }
+            PurchaseItem::where('purchase_id',$id)->delete();
+            $purchase->delete();
+
+            return redirect()->route('purchase.index')->with([
+                'message' => 'Purchase deleted successfully!',
+                'alert-type' => 'success'
+            ]);
+        } catch (Exception $e) {
+            return back()->with('error', $e->getMessage())->withInput();
+            // return response()->json(['error'=>$e->getMessage()],500);
+        }
+    }
     
 }

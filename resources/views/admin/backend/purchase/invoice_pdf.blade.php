@@ -134,12 +134,63 @@
                 background: none;
                 border: 1px solid #ddd;
             }
+
+            .letterhead {
+                border-bottom: 2px solid #0d6efd;
+                padding-bottom: 10px;
+                margin-bottom: 15px;
+            }
+
+            .logo-name {
+                display: flex;
+                align-items: center;
+                gap: 15px;
+            }
+
+            .logo-name img {
+                width: 100%;
+                /* Adjust logo size as needed */
+                height: auto;
+            }
+
+            .company-text h2 {
+                font-size: 18px;
+                color: #0d6efd;
+                margin: 0 0 5px 0;
+            }
+
+            .company-text p {
+                font-size: 12px;
+                color: #333;
+                margin: 2px 0;
+            }
+
         }
     </style>
 </head>
 
 <body>
     <div class="invoice-container">
+        {{-- <div class="letterhead">
+            <div class="logo-name">
+                <img src="{{ public_path('data/logo.png') }}" alt="Company Logo" style="width:50px;">
+                <div class="company-text">
+                    <h2>ABC Software Solutions Co., Ltd.</h2>
+                    <p>123 Main Street, Yangon, Myanmar</p>
+                    <p>Email: info@abcsoftware.com | Phone: +95 9 123 456 789</p>
+                </div>
+            </div>
+        </div> --}}
+
+        <div style="display: flex; align-items: flex-start;">
+            <img src="{{ public_path('data/logo.png') }}" alt="Company Logo"
+                style="width: 60px; height: auto; margin-right: 15px;" >
+            
+                <strong>ABC Software Solutions Co., Ltd.</strong><br>
+                <span style="margin-left:80px;">123 Main Street, Yangon, Myanma</span><br>
+                <span style="margin-left:80px;">Email: info@abcsoftware.com | Phone: +95 9 123 456 789<span>
+            
+        </div>
         <div class="invoice-header">
             <h5>Purchase Invoice</h5>
         </div>
@@ -178,14 +229,14 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($purchase->purchaseItems as $key => $item )
+                @foreach ($purchase->purchaseItems as $key => $item)
                     <tr>
-                <td>{{ $key + 1 }}</td>
-                <td>{{ $item->product->name }}</td>
-                <td>{{ $item->quantity }}</td>
-                <td>${{ number_format($item->net_unit_cost,2)  }}</td>
-                <td>${{ number_format($item->discount,2)  }}</td>
-                <td>${{ number_format($item->subtotal,2)  }}</td>
+                        <td>{{ $key + 1 }}</td>
+                        <td>{{ $item->product->name }}</td>
+                        <td>{{ $item->quantity }}</td>
+                        <td>${{ number_format($item->net_unit_cost, 2) }}</td>
+                        <td>${{ number_format($item->discount, 2) }}</td>
+                        <td>${{ number_format($item->subtotal, 2) }}</td>
                     </tr>
                 @endforeach
             </tbody>
