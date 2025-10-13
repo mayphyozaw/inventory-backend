@@ -63,5 +63,6 @@ Route::middleware('auth')->group(function (){
     Route::resource('purchase', PurchaseController::class);
     Route::get('purchase-datatable', [PurchaseController::class, 'purchaseDatatable'])->name('purchase-datatable');
     Route::get('/purchase/product/search', [PurchaseController::class, 'queryBySearch'])->name('purchase-product-search');
+    Route::get('/invoice/purchase/{id}', [PurchaseController::class, 'invoicePurchase'])->name('invoice.purchase');
 
 });

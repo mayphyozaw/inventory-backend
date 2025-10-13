@@ -13,6 +13,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class PurchaseController extends Controller
 {
@@ -190,4 +191,20 @@ class PurchaseController extends Controller
             return back()->with('error', $e->getMessage())->withInput();
         }
     }
+
+    
+        public function show($id)
+    {
+        $purchase = Purchase::with(['supplier','purchaseItems.product'])->find($id);
+        
+        return view('admin.backend.purchase.show', compact('purchase'));
+    }
+
+    public function invoicePurchase($id)
+    {
+        $purchase = Purchase::with(['supplier', 'warehouse', 'purchaseItems.product'])->find($id);
+        $pdf = Pdf::loadView('admin.backend.purchase.invoice_pdf',compact('purchase'));
+        return $pdf->download('purchase_' . $id. '.pdf');
+    }
+    
 }

@@ -2,7 +2,7 @@
     <i class="fa fa-eye"></i>
 </x-edit-button>
 
-<x-edit-button href="{{ route('purchase.show', $purchase->id) }}" class="btn btn-primary btn-sm" title="PDF Invocie">
+<x-edit-button href="{{ route('invoice.purchase', $purchase->id) }}" class="btn btn-primary btn-sm" title="PDF Invocie">
     <i class="fa-solid fa-download"></i>
 </x-edit-button>
 
