@@ -151,7 +151,7 @@
                                 <a href="{{route('purchase.index')}}" class="tp-link">All Purchase</a>
                             </li>
                             <li>
-                                <a href="{{route('product.index')}}" class="tp-link">Purchase Return</a>
+                                <a href="{{route('return-purchase.index')}}" class="tp-link">Purchase Return</a>
                             </li>
                             
                         </ul>

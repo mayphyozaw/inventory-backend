@@ -30,10 +30,10 @@ return new class extends Migration
             $table->timestamps();
 
             
-            // $table->foreign('category_id')->references('id')->on('product_categories')->onDelete('cascade');
-            // $table->foreign('brand_id')->references('id')->on('brands')->onDelete('set null');
-            // $table->foreign('warehouse_id')->references('id')->on('ware_houses')->onDelete('cascade');
-            // $table->foreign('supplier_id')->references('id')->on('suppliers')->onDelete('set null');
+            $table->foreign('category_id')->references('id')->on('product_categories')->onDelete('cascade');
+            $table->foreign('brand_id')->references('id')->on('brands')->onDelete('set null');
+            $table->foreign('warehouse_id')->references('id')->on('ware_houses')->onDelete('cascade');
+            $table->foreign('supplier_id')->references('id')->on('suppliers')->onDelete('set null');
             
 
         });

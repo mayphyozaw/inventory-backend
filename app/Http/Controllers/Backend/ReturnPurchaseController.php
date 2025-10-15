@@ -4,67 +4,47 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
-use App\Models\Purchase;
-use App\Models\PurchaseItem;
+use App\Models\ReturnPurchase;
+use App\Models\ReturnPurchaseItem;
 use App\Models\Supplier;
 use App\Models\WareHouse;
-use App\Repositories\PurchaseRepository;
+use App\Repositories\ReturnPurchaseRepository;
 use App\Services\ResponseService;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Barryvdh\DomPDF\Facade\Pdf;
 
-class PurchaseController extends Controller
+class ReturnPurchaseController extends Controller
 {
-    protected $purchaseRepository;
+    protected $returnPurchaseRepository;
 
-    public function __construct(PurchaseRepository $purchaseRepository)
+    public function __construct(ReturnPurchaseRepository $returnPurchaseRepository)
     {
-        $this->purchaseRepository = $purchaseRepository;
+        $this->returnPurchaseRepository = $returnPurchaseRepository;
     }
-
+    
     public function index()
     {
-        $purchaseData = Purchase::orderBy('id', 'desc')->get();
-        return view('admin.backend.purchase.index', compact('purchaseData'));
-    }
-
-    public function create()
-    {
-        $suppliers = Supplier::all();
-        $warehouses = WareHouse::all();
-        return view('admin.backend.purchase.create', compact('suppliers', 'warehouses'));
-    }
-
-    public function queryBySearch(Request $request)
-    {
-
-        $query = $request->input('query');
-        $warehouse_id = $request->input('warehouse_id');
-        $products = Product::where(function ($q) use ($query) {
-            $q->where('name', 'LIKE', "%{$query}%")
-                ->orWhere('code', 'LIKE', "%{$query}%");
-        })
-            ->when($warehouse_id, function ($q) use ($warehouse_id) {
-                $q->where('warehouse_id', $warehouse_id);
-            })
-            ->select('id', 'name', 'code', 'price', 'product_qty')
-            ->limit(10)
-            ->get();
-        return response()->json($products);
+        $returnPurchaseData = ReturnPurchase::orderBy('id', 'desc')->get();
+        return view('admin.backend.return-purchase.index', compact('returnPurchaseData'));
     }
 
 
-    public function purchaseDatatable(Request $request)
+    public function returnPurchaseDatatable(Request $request)
     {
         if ($request->ajax()) {
-            return $this->purchaseRepository->purchaseDatatable($request);
+            return $this->returnPurchaseRepository->returnPurchaseDatatable($request);
         }
     }
 
-    public function store(Request $request)
+     public function create()
+    {
+        $suppliers = Supplier::all();
+        $warehouses = WareHouse::all();
+        return view('admin.backend.return-purchase.create', compact('suppliers', 'warehouses'));
+    }
+
+     public function store(Request $request)
     {
 
         $request->validate([
@@ -75,7 +55,7 @@ class PurchaseController extends Controller
 
         try {
 
-            $purchase = Purchase::create([
+            $purchase = ReturnPurchase::create([
                 'date' => $request->date,
                 'warehouse_id' => $request->warehouse_id,
                 'supplier_id' => $request->supplier_id,
@@ -88,6 +68,7 @@ class PurchaseController extends Controller
 
             $grandTotal = 0;
 
+
             foreach ($request->products as $productData) {
                 $product = Product::findOrFail($productData['id']);
                 $netUnitCost = $product['net_unit_cost'] ?? $product->price;
@@ -98,9 +79,10 @@ class PurchaseController extends Controller
 
                 $subtotal = ($netUnitCost * $productData['quantity']) - ($productData['discount'] ?? 0);
                 $grandTotal += $subtotal;
+     
 
-                PurchaseItem::create([
-                    'purchase_id' => $purchase->id,
+                ReturnPurchaseItem::create([
+                    'return_purchase_id' => $purchase->id,
                     'product_id' => $productData['id'],
                     'net_unit_cost' => $netUnitCost,
                     'stock' => $product->product_qty + $productData['quantity'],
@@ -109,13 +91,13 @@ class PurchaseController extends Controller
                     'subtotal' => $subtotal,
                 ]);
 
-                $product->increment('product_qty', $productData['quantity']);
+                $product->decrement('product_qty', $productData['quantity']);
             }
 
             $purchase->update(['grand_total' => $grandTotal + $request->shipping - $request->discount]);
 
-            return redirect()->route('purchase.index')->with([
-                'message' => 'Purchase Stored successfully!',
+            return redirect()->route('return-purchase.index')->with([
+                'message' => 'Return Purchase Stored successfully!',
                 'alert-type' => 'success'
             ]);
         } catch (Exception $e) {
@@ -123,18 +105,24 @@ class PurchaseController extends Controller
         }
     }
 
+    public function show($id)
+    {
+        $returnPurchase = ReturnPurchase::with(['supplier','returnPurchaseItems.product'])->find($id);
+        
+        return view('admin.backend.return-purchase.show', compact('returnPurchase'));
+    }
+
     public function edit($id)
     {
-        $editPurchaseData = Purchase::with('purchaseItems.product')->findOrFail($id);
+        $editReturnPurchaseData = ReturnPurchase::with('returnPurchaseItems.product')->findOrFail($id);
         $suppliers = Supplier::all();
         $warehouses = WareHouse::all();
-        return view('admin.backend.purchase.edit', compact('editPurchaseData', 'suppliers', 'warehouses'));
+        return view('admin.backend.return-purchase.edit',compact('editReturnPurchaseData','suppliers','warehouses'));
     }
 
     public function update(Request $request, $id)
     {
-
-        $request->validate([
+         $request->validate([
             'date' => 'required|date',
             'status' => 'required',
             'supplier_id' => 'required',
@@ -143,8 +131,8 @@ class PurchaseController extends Controller
 
         try {
 
-            $purchase = Purchase::findOrFail($id);
-            $purchase->update([
+            $returnPurchase = ReturnPurchase::findOrFail($id);
+            $returnPurchase->update([
                 'date' => $request->date,
                 'warehouse_id' => $request->warehouse_id,
                 'supplier_id' => $request->supplier_id,
@@ -155,20 +143,20 @@ class PurchaseController extends Controller
                 'grand_total' => $request->grand_total,
             ]);
 
-            $oldPurchaseItems = PurchaseItem::where('purchase_id', $purchase->id)->get();
+            $oldReturnPurchaseItems = ReturnPurchaseItem::where('return_purchase_id', $returnPurchase->id)->get();
 
-            foreach ($oldPurchaseItems as $oldItem) {
+            foreach ($oldReturnPurchaseItems as $oldItem) {
                 $product = Product::find($oldItem->product_id);
                 if ($product) {
-                    $product->decrement('product_qty', $oldItem->quantity);
+                    $product->increment('product_qty', $oldItem->quantity);
                 }
             }
 
-            PurchaseItem::where('purchase_id', $purchase->id)->delete();
+            ReturnPurchaseItem::where('return_purchase_id', $returnPurchase->id)->delete();
 
             foreach ($request->products as $product_id => $productData) {
-                PurchaseItem::create([
-                    'purchase_id' => $purchase->id,
+                ReturnPurchaseItem::create([
+                    'return_purchase_id' => $returnPurchase->id,
                     'product_id' => $product_id,
                     'net_unit_cost' => $productData['net_unit_cost'],
                     'stock' => $productData['stock'],
@@ -180,12 +168,12 @@ class PurchaseController extends Controller
 
                 $product =  Product::find($product_id);
                 if ($product) {
-                    $product->increment('product_qty', $productData['quantity']);
+                    $product->decrement('product_qty', $productData['quantity']);
                 }
             }
 
-            return redirect()->route('purchase.index')->with([
-                'message' => 'Purchase Updatd successfully!',
+            return redirect()->route('return-purchase.index')->with([
+                'message' => 'Return Purchase Updatd successfully!',
                 'alert-type' => 'success'
             ]);
         } catch (\Exception $e) {
@@ -193,42 +181,37 @@ class PurchaseController extends Controller
         }
     }
 
-    
-        public function show($id)
-    {
-        $purchase = Purchase::with(['supplier','purchaseItems.product'])->find($id);
-        
-        return view('admin.backend.purchase.show', compact('purchase'));
-    }
-
-    public function invoicePurchase($id)
-    {
-        $purchase = Purchase::with(['supplier', 'warehouse', 'purchaseItems.product'])->find($id);
-        $pdf = Pdf::loadView('admin.backend.purchase.invoice_pdf',compact('purchase'));
-        return $pdf->download('purchase_' . $id. '.pdf');
-    }
 
     public function destroy($id)
     {
         try {
-            $purchase = Purchase::findOrFail($id);
-            $purchaseItems = PurchaseItem::where('purchase_id',$id)->get();
+            $returnPurchase = ReturnPurchase::findOrFail($id);
+            $returnPurchaseItems = ReturnPurchaseItem::where('return_purchase_id',$id)->get();
 
-            foreach ($purchaseItems as $item) {
+            foreach ($returnPurchaseItems as $item) {
                 $product = Product::find($item->product_id);
                 if($product){
-                    $product->decrement('product_qty',$item->quantity);
+                    $product->increment('product_qty',$item->quantity);
                 }
             }
-            PurchaseItem::where('purchase_id',$id)->delete();
-            $purchase->delete();
-
+            ReturnPurchaseItem::where('return_purchase_id',$id)->delete();
+            $returnPurchase->delete();
+            
             return ResponseService::success([], 'Successfully deleted');
-
+            
         } catch (Exception $e) {
             return back()->with('error', $e->getMessage())->withInput();
             // return response()->json(['error'=>$e->getMessage()],500);
         }
     }
-    
+
+
+    public function invoiceReturnPurchase($id)
+    {
+        $purchase = ReturnPurchase::with(['supplier', 'warehouse', 'returnPurchaseItems.product'])->find($id);
+        $pdf = Pdf::loadView('admin.backend.return-purchase.invoice_pdf',compact('purchase'));
+        return $pdf->download('return-purchase_' . $id. '.pdf');
+
+    }
+     
 }

@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('purchase_items', function (Blueprint $table) {
+        Schema::create('return_purchase_items', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('purchase_id');
+            $table->unsignedBigInteger('return_purchase_id');
             $table->unsignedBigInteger('product_id');
             $table->decimal('net_unit_cost',10,2);
             $table->integer('stock');
@@ -22,7 +22,7 @@ return new class extends Migration
             $table->decimal('subtotal',10,2);
             $table->timestamps();
 
-            $table->foreign('purchase_id')->references('id')->on('purchases')->onDelete('cascade');
+            $table->foreign('return_purchase_id')->references('id')->on('return_purchases')->onDelete('cascade');
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
         });
     }
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('purchase_items');
+        Schema::dropIfExists('return_purchase_items');
     }
 };

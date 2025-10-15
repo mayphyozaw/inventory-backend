@@ -7,6 +7,7 @@ use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\CustomerController;
 use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\PurchaseController;
+use App\Http\Controllers\Backend\ReturnPurchaseController;
 use App\Http\Controllers\Backend\SupplierController;
 use App\Http\Controllers\Backend\WareHouseController;
 use App\Http\Controllers\PasswordController;
@@ -64,5 +65,13 @@ Route::middleware('auth')->group(function (){
     Route::get('purchase-datatable', [PurchaseController::class, 'purchaseDatatable'])->name('purchase-datatable');
     Route::get('/purchase/product/search', [PurchaseController::class, 'queryBySearch'])->name('purchase-product-search');
     Route::get('/invoice/purchase/{id}', [PurchaseController::class, 'invoicePurchase'])->name('invoice.purchase');
+
+
+    Route::resource('return-purchase', ReturnPurchaseController::class);
+    Route::get('return-purchase-datatable', [ReturnPurchaseController::class, 'returnPurchaseDatatable'])->name('return-purchase-datatable');
+    Route::get('/invoice/return-purchase/{id}', [ReturnPurchaseController::class, 'invoiceReturnPurchase'])->name('invoice.return-purchase');
+
+
+
 
 });
