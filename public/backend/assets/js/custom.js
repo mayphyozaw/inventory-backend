@@ -250,11 +250,40 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById(
             "grandTotal"
         ).textContent = `TK ${grandTotal.toFixed(2)}`;
+        updateDueAmount();
 
         document.querySelector("input[name = 'grand_total']").value =
             grandTotal.toFixed(2);
     }
 
+    // Manage Due for sale page
+    function updateDueAmount(){
+        let grandTotal = parseFloat(document.getElementById("input[name='grand_total']").value) || 0;
+        let paidAmount = parseFloat(document.getElementById("input[name='paid_amount']").value) || 0;
+        let fullPaidAmount = parseFloat(document.getElementById("input[name='full_paid']").value) || 0;
+        
+        
+        if(paidAmount < 0){
+            paidAmount = 0;
+            paidAmount = document.getElementById("input[name='paid_amount']").value = 0;
+        }
+
+        if(fullPaidAmount < 0){
+            fullPaidAmount = 0;
+            fullPaidAmount = document.getElementById("input[name='full_paid']").value = 0;
+        }
+
+        let dueAmount = grandTotal - (paidAmount  +  fullPaidAmount)
+        {
+            if(dueAmount < 0){
+            dueAmount = 0;
+             document.getElementById("input[name='dueAmount']").value = 0;
+             document.getElementById("input[name='due_amount']").value = 0;
+        }
+        } 
+            
+    }
+    
     //start modal
 
     let modal = document.createElement("div");

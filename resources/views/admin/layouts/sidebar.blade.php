@@ -158,6 +158,26 @@
                     </div>
                 </li>
 
+
+                <li>
+                    <a href="#sale" data-bs-toggle="collapse">
+                        <i data-feather="users"></i>
+                        <span> Sale Manage </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <div class="collapse" id="sale">
+                        <ul class="nav-second-level">
+                            <li>
+                                <a href="{{route('sale.index')}}" class="tp-link">All Sales</a>
+                            </li>
+                            <li>
+                                <a href="{{route('sale.index')}}" class="tp-link">Sale Return</a>
+                            </li>
+                            
+                        </ul>
+                    </div>
+                </li>
+
                 <li>
                     <a href="#sidebarExpages" data-bs-toggle="collapse">
                         <i data-feather="file-text"></i>

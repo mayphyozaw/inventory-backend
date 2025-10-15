@@ -1,24 +1,23 @@
 @extends('admin.admin_main')
-@section('title', 'Customer')
+@section('title', 'All Sales')
 @section('admin')
     <div class="content">
 
         <div class="container">
             <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
                 <div class="flex-grow-1">
+
                     <ol class="breadcrumb m-0 py-0">
-                        <li class="breadcrumb-item"><a href="javascript: void(0);">Customers</a></li>
-                        <li class="breadcrumb-item active">All Customers Tables</li>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Sales</a></li>
+                        <li class="breadcrumb-item active">All Sales Tables</li>
                     </ol>
+
                 </div>
 
                 <div class="text-end">
-
-                    <x-create-button href="{{ route('customer.create') }}">
-
-                        Create Customer
+                    <x-create-button href="{{ route('sale.create') }}">
+                        Create Sale
                     </x-create-button>
-
                 </div>
             </div>
 
@@ -27,19 +26,20 @@
                     <div class="card">
 
                         <div class="card-header">
-                            <h5 class="card-title mb-0">All Customers</h5>
-                        </div><!-- end card header -->
+                            <h5 class="card-title mb-0">All Sale</h5>
+                        </div>
 
                         <div class="card-body">
                             <table id="datatable"
-                                class="table customerTable table-bordered dt-responsive table-responsive nowrap">
+                                class="table saleTable table-bordered dt-responsive table-responsive nowrap">
                                 <thead>
                                     <tr>
-                                        <th class="text-start">#</th>
-                                        <th class="text-start">Customer Name</th>
-                                        <th class="text-start">Email</th>
-                                        <th class="text-start">Phone</th>
-                                        <th class="text-start">Address</th>
+                                        <th class="text-start">Sl</th>
+                                        <th class="text-start">WareHouse</th>
+                                        <th class="text-start">Status</th>
+                                        <th class="text-start">Grand Total</th>
+                                        <th class="text-start">Due Amount</th>
+                                        <th class="text-start">Created On</th>
                                         <th class="text-start">Action</th>
                                     </tr>
                                 </thead>
@@ -51,21 +51,19 @@
                 </div>
             </div>
         </div>
-
-
-
     </div>
 @endsection
 
 
 @push('scripts')
-    <script>
+   <script>
         $(document).ready(function() {
-            var table = $('.customerTable').DataTable({
+            var table = $('.saleTable').DataTable({
                 processing: true,
                 serverSide: true,
+                searchable: true,
                 ajax: {
-                    url: "{{ route('customer-datatable') }}",
+                    url: "{{ route('sale-datatable') }}",
                     type: 'GET'
                 },
                 columns: [{
@@ -75,26 +73,41 @@
                         orderable: false,
                         searchable: false
                     },
+
                     {
-                        data: 'name',
-                        name: 'name',
+                        data: 'warehouse',
+                        name: 'warehouse',
                         className: 'text-start'
                     },
+
                     {
-                        data: 'email',
-                        name: 'email',
+                        data: 'status',
+                        name: 'status',
                         className: 'text-start'
                     },
+
                     {
-                        data: 'phone',
-                        name: 'phone',
-                        className: 'text-start'
-                    },
-                    {
-                        data: 'address',
-                        name: 'address',
+                        data: 'grand_total',
+                        name: 'grand_total',
                         className: 'text-start',
+                        orderable: false,
+                        searchable: true
                     },
+
+                    {
+                        data: 'due_amount',
+                        name: 'due_amount',
+                        className: 'text-start'
+                    },
+
+                    {
+                        data: 'created_at',
+                        name: 'created_at',
+                        className: 'text-start',
+                        orderable: false,
+                        searchable: false
+                    },
+
                     {
                         data: 'action',
                         name: 'action',
@@ -103,7 +116,6 @@
                         searchable: false
                     }
                 ],
-
                 responsive: true
             });
 
