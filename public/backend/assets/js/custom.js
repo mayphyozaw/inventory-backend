@@ -223,13 +223,13 @@ document.addEventListener("DOMContentLoaded", function () {
         updateGrandTotal();
     }
 
-    // Update Grand Total Function
+    // Update grand update Function
     function updateGrandTotal() {
         let grandTotal = 0;
 
         //Calculate subtotal sum
         document.querySelectorAll(".subtotal").forEach(function (item) {
-            grandTotal += parseInt(item.textContent) || 0;
+            grandTotal += parseFloat(item.textContent) || 0;
         });
 
         //Get discount shipping value
@@ -246,44 +246,66 @@ document.addEventListener("DOMContentLoaded", function () {
             grandTotal = 0;
         }
 
-        //Update grandtotal display
+        //Update Grandtotal display
         document.getElementById(
             "grandTotal"
         ).textContent = `TK ${grandTotal.toFixed(2)}`;
-        updateDueAmount();
 
         document.querySelector("input[name = 'grand_total']").value =
             grandTotal.toFixed(2);
+
+        updateDueAmount();
     }
 
-    // Manage Due for sale page
-    function updateDueAmount(){
-        let grandTotal = parseFloat(document.getElementById("input[name='grand_total']").value) || 0;
-        let paidAmount = parseFloat(document.getElementById("input[name='paid_amount']").value) || 0;
-        let fullPaidAmount = parseFloat(document.getElementById("input[name='full_paid']").value) || 0;
-        
-        
-        if(paidAmount < 0){
-            paidAmount = 0;
-            paidAmount = document.getElementById("input[name='paid_amount']").value = 0;
-        }
 
-        if(fullPaidAmount < 0){
-            fullPaidAmount = 0;
-            fullPaidAmount = document.getElementById("input[name='full_paid']").value = 0;
-        }
-
-        let dueAmount = grandTotal - (paidAmount  +  fullPaidAmount)
-        {
-            if(dueAmount < 0){
-            dueAmount = 0;
-             document.getElementById("input[name='dueAmount']").value = 0;
-             document.getElementById("input[name='due_amount']").value = 0;
-        }
-        } 
-            
-    }
     
+    // Manage Due for sale page
+    function updateDueAmount() {
+        let grandTotal =
+            parseFloat(
+                document.querySelector("input[name='grand_total']").value
+            ) || 0;
+        let paidAmount =
+            parseFloat(
+                document.querySelector("input[name='paid_amount']").value
+            ) || 0;
+            // new add full paid functionality 
+        let fullPaidAmount =
+            parseFloat(
+                document.querySelector("input[name='full_paid']").value
+            ) || 0;
+
+        if (paidAmount < 0) {
+            paidAmount = 0;
+            document.querySelector("input[name='paid_amount']").value = 0;
+        }
+
+        //new add full paid functionality
+        if (fullPaidAmount < 0) {
+            fullPaidAmount = 0;
+            document.querySelector("input[name='full_paid']").value = 0;
+        }
+
+
+        // new add full paid functionality 
+        let dueAmount = grandTotal - (paidAmount + fullPaidAmount);
+        
+            if (dueAmount < 0) {
+                    dueAmount = 0;
+            }
+            document.getElementById("dueAmount").textContent = `TK ${dueAmount.toFixed(2)}`;
+            document.querySelector("input[name='due_amount']").value = dueAmount.toFixed(2);
+        
+    }
+
+    // Event Listeners for discount and shipping input charge
+
+    document.getElementById("inputDiscount").addEventListener("input", updateGrandTotal);
+    document.getElementById("inputShipping").addEventListener("input", updateGrandTotal);
+    document.querySelector("input[name='paid_amount']").addEventListener("input", updateDueAmount);
+    // new add full paid functionality 
+    document.querySelector("input[name='full_paid']").addEventListener("input", updateDueAmount);
+
     //start modal
 
     let modal = document.createElement("div");
@@ -396,17 +418,15 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
 
-     // Event Listeners for discount and shipping input charge
+    // Event listeners for discount and shipping input change
+    document.getElementById("inputDiscount").addEventListener("input", updateGrandTotal);
+    document.getElementById("inputShipping").addEventListener("input", updateGrandTotal);
 
-        document.getElementById("inputDiscount").addEventListener("input", updateGrandTotal);
-
-        document.getElementById("inputShipping").addEventListener("input", updateGrandTotal);
-
-        document.getElementById("inputDiscount").addEventListener("input", function(){
-            document.getElementById("displayDiscount").textContent = this.value || 0;
-        });
-
-        document.getElementById("inputShipping").addEventListener("input", function(){
-            document.getElementById("shippingDisplay").textContent = this.value || 0;
-        });
+  
+    document.getElementById("inputDiscount").addEventListener("input", function () {
+    document.getElementById("displayDiscount").textContent = this.value || 0;
+    });
+        document.getElementById("inputShipping").addEventListener("input", function () {
+    document.getElementById("shippingDisplay").textContent = this.value || 0;
+    });
 });
