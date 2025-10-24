@@ -75,6 +75,8 @@ Route::middleware('auth')->group(function (){
 
     Route::resource('sale', SaleController::class);
     Route::get('sale-datatable', [SaleController::class, 'saleDatatable'])->name('sale-datatable');
+    Route::get('/invoice/sale/{id}', [SaleController::class, 'invoiceSale'])->name('invoice.sale');
+    
 
 
 });

@@ -33,7 +33,7 @@ class Sale extends Model
 
     public function warehouse()
     {
-        return $this->belongsTo(WareHouse::class, 'supplier_id');
+        return $this->belongsTo(WareHouse::class, 'warehouse_id');
     }
 
     protected function acsrStatus(): Attribute

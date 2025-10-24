@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class SaleItem extends Model
 {
     protected $fillable = [
-
         'id',
+        'date',
         'sale_id',
         'product_id',
         'net_unit_cost',
@@ -27,4 +27,5 @@ class SaleItem extends Model
     {
         return $this->belongsTo(Product::class, 'product_id');
     }
+
 }

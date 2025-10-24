@@ -70,7 +70,7 @@ class PurchaseRepository implements BaseRepository
                 
                 return '<span class="badge" style="background-color:#' . $purchase->acsrStatus['color'] . '; color:#fff;">' . $purchase->acsrStatus['text'] . '</span>';
             })
-            ->editColumn('payment', function ($purchase) {
+            ->editColumn('payment', function () {
                 return 'cash';
             })
             ->editColumn('grand_total', function ($purchase) {

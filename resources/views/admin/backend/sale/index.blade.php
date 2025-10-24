@@ -38,6 +38,7 @@
                                         <th class="text-start">WareHouse</th>
                                         <th class="text-start">Status</th>
                                         <th class="text-start">Grand Total</th>
+                                        <th class="text-start">Paid Amount</th>
                                         <th class="text-start">Due Amount</th>
                                         <th class="text-start">Created On</th>
                                         <th class="text-start">Action</th>
@@ -89,6 +90,14 @@
                     {
                         data: 'grand_total',
                         name: 'grand_total',
+                        className: 'text-start',
+                        orderable: false,
+                        searchable: true
+                    },
+
+                    {
+                        data: 'paid_amount',
+                        name: 'paid_amount',
                         className: 'text-start',
                         orderable: false,
                         searchable: true

@@ -74,7 +74,7 @@ class PurchaseController extends Controller
         ]);
 
         try {
-
+            $grandTotal = 0;
             $purchase = Purchase::create([
                 'date' => $request->date,
                 'warehouse_id' => $request->warehouse_id,
@@ -86,7 +86,8 @@ class PurchaseController extends Controller
                 'grand_total' => $request->grand_total,
             ]);
 
-            $grandTotal = 0;
+            
+            
 
             foreach ($request->products as $productData) {
                 $product = Product::findOrFail($productData['id']);
