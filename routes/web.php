@@ -9,10 +9,13 @@ use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\PurchaseController;
 use App\Http\Controllers\Backend\ReturnPurchaseController;
 use App\Http\Controllers\Backend\SaleController;
+use App\Http\Controllers\Backend\SaleReturnController;
 use App\Http\Controllers\Backend\SupplierController;
 use App\Http\Controllers\Backend\WareHouseController;
+use App\Http\Controllers\DueController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\ProfileController;
+use App\Models\SaleReturn;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -76,7 +79,15 @@ Route::middleware('auth')->group(function (){
     Route::resource('sale', SaleController::class);
     Route::get('sale-datatable', [SaleController::class, 'saleDatatable'])->name('sale-datatable');
     Route::get('/invoice/sale/{id}', [SaleController::class, 'invoiceSale'])->name('invoice.sale');
+
+    Route::resource('sale-return', SaleReturnController::class);
+    Route::get('sale-return-datatable', [SaleReturnController::class, 'saleReturnDatatable'])->name('sale-return-datatable');
+    Route::get('/invoice/sale-return/{id}', [SaleReturnController::class, 'invoiceSaleReturn'])->name('invoice.sale-return');
     
 
+    Route::get('due/sale_due', [DueController::class, 'dueSale'])->name('due.sale_due');
+    Route::get('saleDue-datatable', [DueController::class, 'saleDueDatatable'])->name('saleDue-datatable');
+    Route::get('due/sale_return_due',[DueController::class,'dueSaleReturn'])->name('due.sale_return_due');
+    Route::get('saleReturnDue-datatable', [DueController::class, 'saleReturnDueDatatable'])->name('saleReturnDue-datatable');
 
 });

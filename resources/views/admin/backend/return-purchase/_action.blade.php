@@ -12,7 +12,6 @@
 </x-edit-button>
 
 
-
 <x-delete-button href="#" class="btn btn-danger btn-sm deleteBtn" data-url="{{ route('return-purchase.destroy',$returnPurchase->id) }}" style="background-color: red" title="Delete">
     <i class="fa fa-trash-can"></i>
 </x-delete-button>

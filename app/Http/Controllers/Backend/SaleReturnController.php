@@ -5,44 +5,37 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\Product;
-use App\Models\Sale;
 use App\Models\SaleItem;
+use App\Models\SaleReturn;
+use App\Models\SaleReturnItem;
 use App\Models\WareHouse;
-use App\Repositories\SaleRepository;
+use App\Repositories\SaleReturnRepository;
 use App\Services\ResponseService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Exception;
 use Illuminate\Http\Request;
 
-class SaleController extends Controller
+class SaleReturnController extends Controller
 {
-    protected $saleRepository;
+    protected $saleReturnRepository;
 
-    public function __construct(SaleRepository $saleRepository)
+    public function __construct(SaleReturnRepository $saleReturnRepository)
     {
-        $this->saleRepository = $saleRepository;
+        $this->saleReturnRepository = $saleReturnRepository;
     }
 
 
     public function index()
     {
-        $saleData = Sale::orderBy('id', 'desc')->get();
-        return view('admin.backend.sale.index', compact('saleData'));
+        $saleReturnData = SaleReturn::orderBy('id', 'desc')->get();
+        return view('admin.backend.sale-return.index', compact('saleReturnData'));
     }
 
     public function create()
     {
         $customers = Customer::all();
         $warehouses = WareHouse::all();
-        return view('admin.backend.sale.create', compact('customers', 'warehouses'));
-    }
-
-
-    public function saleDatatable(Request $request)
-    {
-        if ($request->ajax()) {
-            return $this->saleRepository->saleDatatable($request);
-        }
+        return view('admin.backend.sale-return.create', compact('customers', 'warehouses'));
     }
 
     public function store(Request $request)
@@ -55,8 +48,8 @@ class SaleController extends Controller
 
         try {
 
-            $grandTotal = 0;
-            $sales = Sale::create([
+
+            $sale = SaleReturn::create([
                 'date' => $request->date,
                 'warehouse_id' => $request->warehouse_id,
                 'customer_id' => $request->customer_id,
@@ -66,8 +59,9 @@ class SaleController extends Controller
                 'note' => $request->note ?? '',
                 'grand_total' => $request->grand_total,
                 'paid_amount' => $request->paid_amount,
-                'due_amount' => $request->due_amount,
+                'due_amount' => $request->due_amount ?? 0,
             ]);
+            $grandTotal = 0;
 
 
             foreach ($request->products as $productData) {
@@ -80,9 +74,9 @@ class SaleController extends Controller
                 $grandTotal += $subtotal;
 
 
-                SaleItem::create([
+                SaleReturnItem::create([
                     'date' => date('Y-m-d'),
-                    'sale_id' => $sales->id,
+                    'sale_return_id' => $sale->id,
                     'product_id' => $productData['id'],
                     'net_unit_cost' => $netUnitCost,
                     'stock' => $product->product_qty + $productData['quantity'],
@@ -91,13 +85,13 @@ class SaleController extends Controller
                     'subtotal' => $subtotal,
                 ]);
 
-                $product->decrement('product_qty', $productData['quantity']);
+                $product->increment('product_qty', $productData['quantity']);
             }
 
-            $sales->update(['grand_total' => $grandTotal + $request->shipping - $request->discount]);
+            $sale->update(['grand_total' => $grandTotal + $request->shipping - $request->discount]);
 
-            return redirect()->route('sale.index')->with([
-                'message' => 'Sale Stored successfully!',
+            return redirect()->route('sale-return.index')->with([
+                'message' => 'Sale Return Stored successfully!',
                 'alert-type' => 'success'
             ]);
         } catch (Exception $e) {
@@ -105,13 +99,19 @@ class SaleController extends Controller
         }
     }
 
+    public function saleReturnDatatable(Request $request)
+    {
+        if ($request->ajax()) {
+            return $this->saleReturnRepository->saleReturnDatatable($request);
+        }
+    }
+
     public function edit($id)
     {
-
-        $editSaleData = Sale::with('saleItems.product')->findOrFail($id);
+        $editSaleReturnData = SaleReturn::with('saleReturnItems.product')->findOrFail($id);
         $customers = Customer::all();
         $warehouses = WareHouse::all();
-        return view('admin.backend.sale.edit', compact('editSaleData', 'customers', 'warehouses'));
+        return view('admin.backend.sale-return.edit', compact('editSaleReturnData', 'customers', 'warehouses'));
     }
 
 
@@ -123,29 +123,27 @@ class SaleController extends Controller
             'status' => 'required',
         ]);
 
-        $sale = Sale::findOrFail($id);
-        $sale->update([
+        $saleReturn = SaleReturn::findOrFail($id);
+        $saleReturn->update([
             'date' => $request->date,
             'warehouse_id' => $request->warehouse_id,
             'customer_id' => $request->customer_id,
             'discount' => $request->discount ?? 0,
             'shipping' => $request->shipping ?? 0,
             'status' => $request->status,
-            'note' => $request->note,
-            'grand_total' => $request->grand_total ?? 0,
-            'paid_amount' => $request->paid_amount ?? 0,
+            'note' => $request->note ?? '',
+            'grand_total' => $request->grand_total,
+            'paid_amount' => $request->paid_amount,
             'due_amount' => $request->due_amount ?? 0,
-            'full_paid' => $request->full_paid ?? 0,
         ]);
 
         // Delete old sales item
-
-        SaleItem::where('sale_id', $sale->id)->delete();
+        SaleReturnItem::where('sale_return_id', $saleReturn->id)->delete();
 
         foreach ($request->products as $product_id => $productData) {
-            SaleItem::create([
+            SaleReturnItem::create([
                 'date' => $request->date,
-                'sale_id' => $sale->id,
+                'sale_return_id' => $saleReturn->id,
                 'product_id' => $product_id,
                 'net_unit_cost' => $productData['net_unit_cost'],
                 'stock' => $productData['stock'],
@@ -154,53 +152,56 @@ class SaleController extends Controller
                 'subtotal' => $productData['subtotal'],
             ]);
 
+            /// Update Product Stock
+
             $product = Product::find($product_id);
             if ($product) {
-                $product->decrement('product_qty', $productData['quantity']);
+                $qty = $product->product_qty;
+                $product->product_qty = $qty += $productData['quantity'];
+                $product->save();
             }
         }
 
         $notification = array(
-            'message' => 'Sale Updated Successfully',
+            'message' => 'Sale Return Updated Successfully',
             'alert-type' => 'success'
         );
-        return redirect()->route('sale.index')->with($notification);
+        return redirect()->route('sale-return.index')->with($notification);
     }
-    // End Method 
 
     public function destroy($id)
     {
         try {
-            $sale = Sale::findOrFail($id);
-            $saleItems = SaleItem::where('sale_id', $id)->get();
+            $saleReturn = SaleReturn::findOrFail($id);
+            $saleIReturntems = SaleReturnItem::where('sale_return_id', $id)->get();
 
-            foreach ($saleItems as $item) {
+            foreach ($saleIReturntems as $item) {
                 $product = Product::find($item->product_id);
                 if ($product) {
-                    $product->increment('product_qty', $item->quantity);
+                    $product->decrement('product_qty', $item->quantity);
                 }
             }
-            SaleItem::where('sale_id', $id)->delete();
-            $sale->delete();
+            SaleReturnItem::where('sale_return_id', $id)->delete();
+            $saleReturn->delete();
 
             return ResponseService::success([], 'Successfully deleted');
         } catch (Exception $e) {
             return back()->with('error', $e->getMessage())->withInput();
-            // return response()->json(['error'=>$e->getMessage()],500);
+           
         }
     }
 
-    public function show($id)
+       public function show($id)
     {
-        $sale = Sale::with(['customer', 'saleItems.product'])->find($id);
-
-        return view('admin.backend.sale.show', compact('sale'));
+        $saleReturn = SaleReturn::with(['customer','saleReturnItems.product'])->find($id);
+        
+        return view('admin.backend.sale-return.show', compact('saleReturn'));
     }
 
-    public function invoiceSale($id)
-    {
-        $sale = Sale::with(['customer', 'warehouse', 'saleItems.product'])->find($id);
-        $pdf = Pdf::loadView('admin.backend.sale.invoice_pdf', compact('sale'));
-        return $pdf->download('sale_' . $id . '.pdf');
+    public function invoiceSaleReturn($id)
+   {
+        $saleReturn = SaleReturn::with(['customer', 'warehouse', 'saleReturnItems.product'])->find($id);
+        $pdf = Pdf::loadView('admin.backend.sale-return.invoice_pdf',compact('saleReturn'));
+        return $pdf->download('sale_return_' . $id. '.pdf');
     }
 }

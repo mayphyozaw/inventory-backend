@@ -71,7 +71,7 @@ class ReturnPurchaseRepository implements BaseRepository
                 return '<span class="badge" style="background-color:#' . $returnPurchase->acsrStatus['color'] . '; color:#fff;">' . $returnPurchase->acsrStatus['text'] . '</span>';
             })
             ->editColumn('payment', function () {
-                return 'cash';
+                return 'Cash';
             })
             ->editColumn('grand_total', function ($returnPurchase) {
                 return '$' . number_format($returnPurchase->grand_total,2);

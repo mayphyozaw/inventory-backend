@@ -1,23 +1,23 @@
 @extends('admin.admin_main')
-@section('title', 'Edit Sale')
+@section('title', 'Edit Sale Return')
 @section('admin')
     <div class="content d-flex flex-column flex-column-fluid">
         <div class="d-flex flex-column-fluid">
             <div class="container-fluid my-0">
                 <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
                     <div class="flex-grow-1">
-                        <h4 class="fs-18 fw-semibold m-0">Edit Sale</h4>
+                        <h4 class="fs-18 fw-semibold m-0">Edit Sale Return</h4>
                     </div>
                     <div class="text-end">
                         <ol class="breadcrumb m-0 py-0">
-                            <a href="{{ route('sale.index') }}" class="btn btn-dark">Back</a>
+                            <a href="{{ route('sale-return.index') }}" class="btn btn-dark">Back</a>
                         </ol>
                     </div>
                 </div>
                 <div class="card">
                     <div class="card-body">
 
-                        <form action="{{ route('sale.update', $editSaleData->id) }}" method="post"
+                        <form action="{{ route('sale-return.update', $editSaleReturnData->id) }}" method="post"
                             enctype="multipart/form-data" id="submit-form">
                             @method('PUT')
                             @csrf
@@ -36,7 +36,7 @@
                                             @enderror
                                         </div>
 
-                                        <input type="hidden" name="warehouse_id" value="{{ $editSaleData->warehouse_id }}">
+                                        <input type="hidden" name="warehouse_id" value="{{ $editSaleReturnData->warehouse_id }}">
 
                                         <div class="col-md-4 mb-3">
                                             <div class="form-group w-100">
@@ -49,7 +49,7 @@
                                                     <option value="">Select WareHouse</option>
                                                     @foreach ($warehouses as $item)
                                                         <option value="{{ $item->id }}"
-                                                            {{ $item->id === $editSaleData->warehouse_id ? 'selected' : '' }}>
+                                                            {{ $item->id === $editSaleReturnData->warehouse_id ? 'selected' : '' }}>
                                                             {{ $item->name }}
                                                         </option>
                                                     @endforeach
@@ -71,7 +71,7 @@
                                                     <option value="">Select Supplier</option>
                                                     @foreach ($customers as $item)
                                                         <option value="{{ $item->id }}"
-                                                            {{ $item->id === $editSaleData->customer_id ? 'selected' : '' }}>
+                                                            {{ $item->id === $editSaleReturnData->customer_id ? 'selected' : '' }}>
                                                             {{ $item->name }}
                                                         </option>
                                                     @endforeach
@@ -116,7 +116,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody id="productBody">
-                                                @foreach ($editSaleData->saleItems as $item)
+                                                @foreach ($editSaleReturnData->saleReturnItems as $item)
                                                     <tr data-id={{ $item->id }}>
                                                         <td class="d-flex align-items-center gap-2">
                                                             <input type="text" class="form-control"
@@ -207,19 +207,19 @@
                                                             <tr>
                                                                 <td class="py-3">Discount</td>
                                                                 <td class="py-3" id="displayDiscount">TK
-                                                                    {{ $editSaleData->discount }}</td>
+                                                                    {{ $editSaleReturnData->discount }}</td>
                                                             </tr>
                                                             <tr>
                                                                 <td class="py-3">Shipping</td>
                                                                 <td class="py-3" id="shippingDisplay">TK
-                                                                    {{ $editSaleData->shipping }}</td>
+                                                                    {{ $editSaleReturnData->shipping }}</td>
                                                             </tr>
                                                             <tr>
                                                                 <td class="py-3 text-primary">Grand Total</td>
                                                                 <td class="py-3 text-primary" id="grandTotal">TK
-                                                                    {{ $editSaleData->grand_total }}</td>
+                                                                    {{ $editSaleReturnData->grand_total }}</td>
                                                                 <input type="hidden" name="grand_total"
-                                                                    value="{{ $editSaleData->grand_total }}">
+                                                                    value="{{ $editSaleReturnData->grand_total }}">
                                                             </tr>
 
 
@@ -227,7 +227,7 @@
                                                                 <td class="py-3">Paid Amount</td>
                                                                 <td class="py-3" id="paidAmount">
                                                                     <input type="text" name="paid_amount"
-                                                                        value="{{ $editSaleData->paid_amount }}"
+                                                                        value="{{ $editSaleReturnData->paid_amount }}"
                                                                         class="form-control">
                                                                 </td>
                                                             </tr>
@@ -237,13 +237,13 @@
                                                                 <td class="py-3" id="fullPaid">
                                                                     <input type="text" name="full_paid"
                                                                         id="fullPaidInput"
-                                                                        value="{{ $editSaleData->full_paid }}">
+                                                                        value="{{ $editSaleReturnData->full_paid }}">
                                                                 </td>
                                                             </tr>
                                                             <tr>
                                                                 <td class="py-3">Due Amount</td>
                                                                 <td class="py-3" id="dueAmount">TK
-                                                                    {{ $editSaleData->due_amount }}</td>
+                                                                    {{ $editSaleReturnData->due_amount }}</td>
                                                                 <input type="hidden" name="due_amount">
                                                             </tr>
 
@@ -260,12 +260,12 @@
                                     <div class="col-md-4">
                                         <label class="form-label">Discount: </label>
                                         <input type="number" id="inputDiscount" name="discount" class="form-control"
-                                            value="{{ $editSaleData->discount }}">
+                                            value="{{ $editSaleReturnData->discount }}">
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Shipping: </label>
                                         <input type="number" id="inputShipping" name="shipping" class="form-control"
-                                            value="{{ $editSaleData->shipping }}">
+                                            value="{{ $editSaleReturnData->shipping }}">
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group w-100">
@@ -273,14 +273,14 @@
                                                     class="text-danger">*</span></label>
                                             <select name="status" id="status" class="form-control form-select">
                                                 <option value="">Select Status</option>
-                                                <option value="Sale"
-                                                    {{ $editSaleData->status === 'Sale' ? 'selected' : '' }}>
-                                                    Sale</option>
+                                                <option value="SaleReturn"
+                                                    {{ $editSaleReturnData->status === 'SaleReturn' ? 'selected' : '' }}>
+                                                    SaleReturn</option>
                                                 <option value="Pending"
-                                                    {{ $editSaleData->status === 'Pending' ? 'selected' : '' }}>Pending
+                                                    {{ $editSaleReturnData->status === 'Pending' ? 'selected' : '' }}>Pending
                                                 </option>
                                                 <option value="Ordered"
-                                                    {{ $editSaleData->status === 'Ordered' ? 'selected' : '' }}>Ordered
+                                                    {{ $editSaleReturnData->status === 'Ordered' ? 'selected' : '' }}>Ordered
                                                 </option>
                                             </select>
                                             @error('status')
@@ -292,7 +292,7 @@
 
                                 <div class="col-md-12 mt-2">
                                     <label class="form-label">Notes: </label>
-                                    <textarea class="form-control" name="note" rows="3" placeholder="Enter Notes">{{ $editSaleData->note }} </textarea>
+                                    <textarea class="form-control" name="note" rows="3" placeholder="Enter Notes">{{ $editSaleReturnData->note }} </textarea>
                                 </div>
                             </div>
                     </div>
@@ -301,7 +301,7 @@
                 <div class="col-xl-12">
                     <div class="d-flex mt-5 justify-content-end">
                         <button class="btn btn-primary me-3" type="submit">Save</button>
-                        <a class="btn btn-secondary" href="{{ route('sale.index') }}">Cancel</a>
+                        <a class="btn btn-secondary" href="{{ route('sale-return.index') }}">Cancel</a>
                     </div>
                 </div>
             </div>
@@ -330,6 +330,7 @@
 
                 }
             });
+            
 
             //Increment quantity
             document.querySelectorAll(".increment-qty").forEach((button) => {

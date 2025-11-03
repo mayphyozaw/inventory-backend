@@ -1,22 +1,22 @@
 @extends('admin.admin_main')
-@section('title', 'Create Return Purchase')
+@section('title', 'Create Sales Return')
 @section('admin')
     <div class="content d-flex flex-column flex-column-fluid">
         <div class="d-flex flex-column-fluid">
             <div class="container-fluid my-0">
                 <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
                     <div class="flex-grow-1">
-                        <h4 class="fs-18 fw-semibold m-0">Create Return Purchase</h4>
+                        <h4 class="fs-18 fw-semibold m-0">Create Sale Return</h4>
                     </div>
                     <div class="text-end">
                         <ol class="breadcrumb m-0 py-0">
-                            <a href="{{ route('return-purchase.index') }}" class="btn btn-dark">Back</a>
+                            <a href="{{ route('sale-return.index') }}" class="btn btn-dark">Back</a>
                         </ol>
                     </div>
                 </div>
                 <div class="card">
                     <div class="card-body">
-                        <form action="{{ route('return-purchase.store') }}" method="post" enctype="multipart/form-data"
+                        <form action="{{ route('sale-return.store') }}" method="post" enctype="multipart/form-data"
                             id="submit-form">
                             @csrf
                             <div class="row">
@@ -57,19 +57,19 @@
                                         <div class="col-md-4 mb-3">
                                             <div class="form-group w-100">
                                                 <label class="form-label" for="formBasic">
-                                                    Supplier:
+                                                    Customer:
                                                     <span class="text-danger">*</span>
                                                 </label>
-                                                <select name="supplier_id" id="supplier_id"
+                                                <select name="customer_id" id="customer_id"
                                                     class="form-control form-select">
-                                                    <option value="">Select Supplier</option>
-                                                    @foreach ($suppliers as $item)
+                                                    <option value="">Select Customer</option>
+                                                    @foreach ($customers as $item)
                                                         <option value="{{ $item->id }}">
                                                             {{ $item->name }}
                                                         </option>
                                                     @endforeach
                                                 </select>
-                                                @error('supplier_id')
+                                                @error('customer_id')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
                                             </div>
@@ -139,7 +139,7 @@
                                                             </tr>
 
 
-                                                            <tr class="d-none">
+                                                            <tr>
                                                                 <td class="py-3">Paid Amount</td>
                                                                 <td class="py-3" id="paidAmount"> 
                                                                     <input type="text" name="paid_amount"
@@ -155,7 +155,7 @@
                                                                         id="fullPaidInput">
                                                                 </td>
                                                             </tr>
-                                                            <tr class="d-none">
+                                                            <tr>
                                                                 <td class="py-3">Due Amount</td>
                                                                 <td class="py-3" id="dueAmount">TK 0.00</td>
                                                                 <input type="hidden" name="due_amount">
@@ -187,7 +187,7 @@
                                                     class="text-danger">*</span></label>
                                             <select name="status" id="status" class="form-control form-select">
                                                 <option value="">Select Status</option>
-                                                <option value="Return">Return</option>
+                                                <option value="SaleReturn">Sale Return</option>
                                                 <option value="Pending">Pending</option>
                                                 <option value="Ordered">Ordered</option>
                                             </select>
@@ -209,7 +209,7 @@
                 <div class="col-xl-12">
                     <div class="d-flex mt-5 justify-content-end">
                         <button class="btn btn-primary me-3" type="submit">Save</button>
-                        <a class="btn btn-secondary" href="{{ route('return-purchase.index') }}">Cancel</a>
+                        <a class="btn btn-secondary" href="{{ route('sale-return.index') }}">Cancel</a>
                     </div>
                 </div>
             </div>

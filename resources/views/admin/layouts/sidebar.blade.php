@@ -57,7 +57,7 @@
 
                 <li>
                     <a href="#brand" data-bs-toggle="collapse">
-                        <i data-feather="users"></i>
+                       <i data-feather="users"></i>
                         <span> Brand Manage </span>
                         <span class="menu-arrow"></span>
                     </a>
@@ -171,7 +171,7 @@
                                 <a href="{{route('sale.index')}}" class="tp-link">All Sales</a>
                             </li>
                             <li>
-                                <a href="{{route('sale.index')}}" class="tp-link">Sale Return</a>
+                                <a href="{{route('sale-return.index')}}" class="tp-link">Sale Return</a>
                             </li>
                             
                         </ul>
@@ -179,43 +179,25 @@
                 </li>
 
                 <li>
-                    <a href="#sidebarExpages" data-bs-toggle="collapse">
-                        <i data-feather="file-text"></i>
-                        <span> Utility </span>
+                    <a href="#due" data-bs-toggle="collapse">
+                        <i data-feather="users"></i>
+                        <span> Due Setup </span>
                         <span class="menu-arrow"></span>
                     </a>
-                    <div class="collapse" id="sidebarExpages">
+                    <div class="collapse" id="due">
                         <ul class="nav-second-level">
                             <li>
-                                <a href="pages-starter.html" class="tp-link">Starter</a>
+                                <a href="{{route('due.sale_due')}}" class="tp-link">Sale Due</a>
                             </li>
                             <li>
-                                <a href="pages-profile.html" class="tp-link">Profile</a>
+                                <a href="{{route('due.sale_return_due')}}" class="tp-link">Sale Return Due</a>
                             </li>
-                            <li>
-                                <a href="pages-pricing.html" class="tp-link">Pricing</a>
-                            </li>
-                            <li>
-                                <a href="pages-timeline.html" class="tp-link">Timeline</a>
-                            </li>
-                            <li>
-                                <a href="pages-invoice.html" class="tp-link">Invoice</a>
-                            </li>
-                            <li>
-                                <a href="pages-faqs.html" class="tp-link">FAQs</a>
-                            </li>
-                            <li>
-                                <a href="pages-gallery.html" class="tp-link">Gallery</a>
-                            </li>
-                            <li>
-                                <a href="pages-maintenance.html" class="tp-link">Maintenance</a>
-                            </li>
-                            <li>
-                                <a href="pages-coming-soon.html" class="tp-link">Coming Soon</a>
-                            </li>
+                            
                         </ul>
                     </div>
                 </li>
+
+                
 
                 
 
