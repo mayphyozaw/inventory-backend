@@ -11,6 +11,7 @@ use App\Http\Controllers\Backend\ReturnPurchaseController;
 use App\Http\Controllers\Backend\SaleController;
 use App\Http\Controllers\Backend\SaleReturnController;
 use App\Http\Controllers\Backend\SupplierController;
+use App\Http\Controllers\Backend\TransferController;
 use App\Http\Controllers\Backend\WareHouseController;
 use App\Http\Controllers\DueController;
 use App\Http\Controllers\PasswordController;
@@ -89,5 +90,9 @@ Route::middleware('auth')->group(function (){
     Route::get('saleDue-datatable', [DueController::class, 'saleDueDatatable'])->name('saleDue-datatable');
     Route::get('due/sale_return_due',[DueController::class,'dueSaleReturn'])->name('due.sale_return_due');
     Route::get('saleReturnDue-datatable', [DueController::class, 'saleReturnDueDatatable'])->name('saleReturnDue-datatable');
+
+    Route::resource('transfer',TransferController::class); 
+    Route::get('transfer-datatable', [TransferController::class, 'transferDatatable'])->name('transfer-datatable');
+
 
 });

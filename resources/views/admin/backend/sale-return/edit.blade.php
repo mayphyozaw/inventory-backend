@@ -36,7 +36,8 @@
                                             @enderror
                                         </div>
 
-                                        <input type="hidden" name="warehouse_id" value="{{ $editSaleReturnData->warehouse_id }}">
+                                        <input type="hidden" name="warehouse_id"
+                                            value="{{ $editSaleReturnData->warehouse_id }}">
 
                                         <div class="col-md-4 mb-3">
                                             <div class="form-group w-100">
@@ -277,10 +278,12 @@
                                                     {{ $editSaleReturnData->status === 'SaleReturn' ? 'selected' : '' }}>
                                                     SaleReturn</option>
                                                 <option value="Pending"
-                                                    {{ $editSaleReturnData->status === 'Pending' ? 'selected' : '' }}>Pending
+                                                    {{ $editSaleReturnData->status === 'Pending' ? 'selected' : '' }}>
+                                                    Pending
                                                 </option>
                                                 <option value="Ordered"
-                                                    {{ $editSaleReturnData->status === 'Ordered' ? 'selected' : '' }}>Ordered
+                                                    {{ $editSaleReturnData->status === 'Ordered' ? 'selected' : '' }}>
+                                                    Ordered
                                                 </option>
                                             </select>
                                             @error('status')
@@ -295,24 +298,21 @@
                                     <textarea class="form-control" name="note" rows="3" placeholder="Enter Notes">{{ $editSaleReturnData->note }} </textarea>
                                 </div>
                             </div>
+
+                            <div class="col-xl-12">
+                                <div class="d-flex mt-5 justify-content-end">
+                                    <button class="btn btn-primary me-3" type="submit">Save</button>
+                                    <a class="btn btn-secondary" href="{{ route('sale-return.index') }}">Cancel</a>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
 
-                <div class="col-xl-12">
-                    <div class="d-flex mt-5 justify-content-end">
-                        <button class="btn btn-primary me-3" type="submit">Save</button>
-                        <a class="btn btn-secondary" href="{{ route('sale-return.index') }}">Cancel</a>
-                    </div>
-                </div>
             </div>
-            </form>
+
         </div>
     </div>
-    </div>
-    </div>
-    </div>
-
-
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -330,7 +330,7 @@
 
                 }
             });
-            
+
 
             //Increment quantity
             document.querySelectorAll(".increment-qty").forEach((button) => {

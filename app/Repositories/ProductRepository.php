@@ -49,7 +49,7 @@ class ProductRepository implements BaseRepository
 
     public function productDatatable(Request $request)
     {
-        $model = $this->model::query();
+        $model = $this->model::query()->orderBy('id', 'desc');
 
 
         return DataTables::eloquent($model)
@@ -59,6 +59,9 @@ class ProductRepository implements BaseRepository
                 });
             })
             ->addIndexColumn()
+            ->editColumn('code', function ($product) {
+                return $product->code ?? '';
+            })
             ->editColumn('image', function ($product) {
                 if ($product->productImages->isNotEmpty()) {
                     $images = '';
@@ -86,7 +89,7 @@ class ProductRepository implements BaseRepository
             ->addColumn('responsive-icon', function () {
                 return null;
             })
-            ->rawColumns(['image', 'stock_alert', 'action'])
+            ->rawColumns(['code','image', 'stock_alert', 'action'])
             ->make(true);
     }
 }

@@ -21,7 +21,7 @@ class ReturnPurchase extends Model
 
     public function returnPurchaseItems()
     {
-        return $this->hasMany(ReturnPurchaseItem::class,'return_purchase_item_id');
+        return $this->hasMany(ReturnPurchaseItem::class,'return_purchase_id');
     }
 
     public function warehouse()

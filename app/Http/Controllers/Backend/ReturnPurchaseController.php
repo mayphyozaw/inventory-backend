@@ -112,6 +112,8 @@ class ReturnPurchaseController extends Controller
         return view('admin.backend.return-purchase.show', compact('returnPurchase'));
     }
 
+    
+
     public function edit($id)
     {
         $editReturnPurchaseData = ReturnPurchase::with('returnPurchaseItems.product')->findOrFail($id);

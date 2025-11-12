@@ -57,7 +57,7 @@
 
                 <li>
                     <a href="#brand" data-bs-toggle="collapse">
-                       <i data-feather="users"></i>
+                       <i data-feather="list"></i>
                         <span> Brand Manage </span>
                         <span class="menu-arrow"></span>
                     </a>
@@ -74,7 +74,7 @@
 
                 <li>
                     <a href="#warehouse" data-bs-toggle="collapse">
-                        <i data-feather="users"></i>
+                         <i data-feather="layers"></i>
                         <span> Warehouse Manage </span>
                         <span class="menu-arrow"></span>
                     </a>
@@ -122,7 +122,7 @@
 
                 <li>
                     <a href="#product" data-bs-toggle="collapse">
-                        <i data-feather="users"></i>
+                         <i data-feather="package"></i>
                         <span> Product Manage </span>
                         <span class="menu-arrow"></span>
                     </a>
@@ -141,7 +141,7 @@
 
                <li>
                     <a href="#purchase" data-bs-toggle="collapse">
-                        <i data-feather="users"></i>
+                        <i data-feather="shopping-bag"></i>
                         <span> Purchase Manage </span>
                         <span class="menu-arrow"></span>
                     </a>
@@ -161,7 +161,7 @@
 
                 <li>
                     <a href="#sale" data-bs-toggle="collapse">
-                        <i data-feather="users"></i>
+                        <i data-feather="dollar-sign"></i>
                         <span> Sale Manage </span>
                         <span class="menu-arrow"></span>
                     </a>
@@ -180,7 +180,7 @@
 
                 <li>
                     <a href="#due" data-bs-toggle="collapse">
-                        <i data-feather="users"></i>
+                        <i data-feather="alert-octagon"></i>
                         <span> Due Setup </span>
                         <span class="menu-arrow"></span>
                     </a>
@@ -197,10 +197,25 @@
                     </div>
                 </li>
 
-                
+
+                <li>
+                    <a href="#transfers" data-bs-toggle="collapse">
+                        <i data-feather="alert-octagon"></i>
+                        <span> Transfers Setup </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <div class="collapse" id="transfers">
+                        <ul class="nav-second-level">
+                            <li>
+                                <a href="{{route('transfer.index')}}" class="tp-link">All Transfers</a>
+                            </li>
+                            
+                            
+                        </ul>
+                    </div>
+                </li>
 
                 
-
                 <li class="menu-title mt-2">General</li>
 
                 <li>

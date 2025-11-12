@@ -1,5 +1,5 @@
 @extends('admin.admin_main')
-@section('title', 'Product')
+@section('title', 'All Transfers')
 @section('admin')
     <div class="content">
 
@@ -8,15 +8,15 @@
                 <div class="flex-grow-1">
 
                     <ol class="breadcrumb m-0 py-0">
-                        <li class="breadcrumb-item"><a href="javascript: void(0);">Products</a></li>
-                        <li class="breadcrumb-item active">All Products Tables</li>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Transfers</a></li>
+                        <li class="breadcrumb-item active">All Transfer Tables</li>
                     </ol>
 
                 </div>
 
                 <div class="text-end">
-                    <x-create-button href="{{ route('product.create') }}">
-                        Create Product
+                    <x-create-button href="{{ route('transfer.create') }}">
+                        Create Transfer
                     </x-create-button>
                 </div>
             </div>
@@ -26,21 +26,20 @@
                     <div class="card">
 
                         <div class="card-header">
-                            <h5 class="card-title mb-0">All Products</h5>
+                            <h5 class="card-title mb-0">All Transfer</h5>
                         </div>
 
                         <div class="card-body">
                             <table id="datatable"
-                                class="table productTable table-bordered dt-responsive table-responsive nowrap">
+                                class="table transferTable table-bordered dt-responsive table-responsive nowrap">
                                 <thead>
                                     <tr>
-                                        <th class="text-start">#</th>
-                                        <th class="text-start">Code</th>
-                                        <th class="text-start">Image</th>
-                                        <th class="text-start">Name</th>
-                                        <th class="text-start">Warehouse</th>
-                                        <th class="text-start">Price</th>
-                                        <th class="text-start">In Stock</th>
+                                        <th class="text-start">Sl</th>
+                                        <th class="text-start">Date</th>
+                                        <th class="text-start">From WareHouse</th>
+                                        <th class="text-start">To WareHouse</th>
+                                        <th class="text-start">Product </th>
+                                        <th class="text-start">Stock Transfer</th>
                                         <th class="text-start">Action</th>
                                     </tr>
                                 </thead>
@@ -57,14 +56,14 @@
 
 
 @push('scripts')
-    <script>
+   <script>
         $(document).ready(function() {
-            var table = $('.productTable').DataTable({
+            var table = $('.transferTable').DataTable({
                 processing: true,
                 serverSide: true,
                 searchable: true,
                 ajax: {
-                    url: "{{ route('product-datatable') }}",
+                    url: "{{ route('transfer-datatable') }}",
                     type: 'GET'
                 },
                 columns: [{
@@ -74,43 +73,38 @@
                         orderable: false,
                         searchable: false
                     },
+
                     {
-                        data: 'code',
-                        name: 'code',
-                        className: 'text-start'
-                    },
-                    {
-                        data: 'image',
-                        name: 'image',
+                        data: 'created_at',
+                        name: 'created_at',
                         className: 'text-start'
                     },
 
                     {
-                        data: 'name',
-                        name: 'name',
+                        data: 'fromWarehouse',
+                        name: 'fromWarehouse',
                         className: 'text-start'
                     },
 
                     {
-                        data: 'warehouse',
-                        name: 'warehouse',
+                        data: 'toWarehouse',
+                        name: 'toWarehouse',
+                        className: 'text-start'
+                    },
+
+                    {
+                        data: 'product',
+                        name: 'product',
                         className: 'text-start',
                         orderable: false,
                         searchable: true
                     },
-
                     {
-                        data: 'price',
-                        name: 'price',
-                        className: 'text-start'
-                    },
-
-                    {
-                        data: 'stock_alert',
-                        name: 'stock_alert',
+                        data: 'stock',
+                        name: 'stock',
                         className: 'text-start',
                         orderable: false,
-                        searchable: false
+                        searchable: true
                     },
 
                     {

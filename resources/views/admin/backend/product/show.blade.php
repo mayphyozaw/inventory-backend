@@ -55,12 +55,12 @@
 
                                 <li class="list-group-item">
                                     <strong>Supplier:</strong>
-                                    {{$product->supplier->name}}
+                                    {{$product->supplier->name ?? ''}}
                                 </li>
 
                                 <li class="list-group-item">
                                     <strong>Category:</strong>
-                                    {{$product->productCategory->category_name}}
+                                    {{$product->productCategory->category_name ?? ''}}
                                 </li>
 
                                 <li class="list-group-item">

@@ -11,23 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sale_returns', function (Blueprint $table) {
+        Schema::create('transfers', function (Blueprint $table) {
             $table->id();
             $table->date('date');
-            $table->unsignedBigInteger('warehouse_id');
-            $table->unsignedBigInteger('customer_id');
+            $table->unsignedBigInteger('from_warehouse_id');
+            $table->unsignedBigInteger('to_warehouse_id');
             $table->decimal('discount', 10,2)->default(0.00);
             $table->decimal('shipping', 10,2)->default(0.00);
-            $table->enum('status',['SaleReturn','Ordered', 'Received']);
+            $table->enum('status',['Transfer','Ordered', 'Received']);
             $table->text('note')->nullable;
             $table->decimal('grand_total', 15,2);
-            $table->decimal('paid_amount', 10,2)->default(0);
-            $table->decimal('due_amount', 15,2)->default(0);
-            $table->decimal('full-paid')->nullable();
             $table->timestamps();
 
-            $table->foreign('warehouse_id')->references('id')->on('ware_houses')->onDelete('cascade');
-            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
+            $table->foreign('from_warehouse_id')->references('id')->on('ware_houses')->onDelete('cascade');
+            $table->foreign('to_warehouse_id')->references('id')->on('ware_houses')->onDelete('cascade');
         });
     }
 
@@ -36,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sale_returns');
+        Schema::dropIfExists('transfers');
     }
 };

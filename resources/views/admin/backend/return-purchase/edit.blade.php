@@ -16,7 +16,7 @@
                 </div>
                 <div class="card">
                     <div class="card-body">
-    
+
                         <form action="{{ route('return-purchase.update', $editReturnPurchaseData->id) }}" method="post"
                             enctype="multipart/form-data" id="submit-form">
                             @method('PUT')
@@ -36,7 +36,8 @@
                                             @enderror
                                         </div>
 
-                                        <input type="hidden" name="warehouse_id" value="{{$editReturnPurchaseData->warehouse_id}}">
+                                        <input type="hidden" name="warehouse_id"
+                                            value="{{ $editReturnPurchaseData->warehouse_id }}">
 
                                         <div class="col-md-4 mb-3">
                                             <div class="form-group w-100">
@@ -65,8 +66,9 @@
                                                     Supplier:
                                                     <span class="text-danger">*</span>
                                                 </label>
-                                                <select name="supplier_id" id="supplier_id" class="form-control form-select">
-                                                    
+                                                <select name="supplier_id" id="supplier_id"
+                                                    class="form-control form-select">
+
                                                     <option value="">Select Supplier</option>
                                                     @foreach ($suppliers as $item)
                                                         <option value="{{ $item->id }}"
@@ -75,7 +77,7 @@
                                                         </option>
                                                     @endforeach
                                                 </select>
-                                                
+
                                             </div>
                                         </div>
                                     </div>
@@ -215,7 +217,8 @@
                                                                 <td class="py-3 text-primary">Grand Total</td>
                                                                 <td class="py-3 text-primary" id="grandTotal">
                                                                     TK {{ $editReturnPurchaseData->grand_total }}</td>
-                                                                <input type="hidden" name="grand_total" value="{{$editReturnPurchaseData->grand_total }}">
+                                                                <input type="hidden" name="grand_total"
+                                                                    value="{{ $editReturnPurchaseData->grand_total }}">
                                                             </tr>
 
 
@@ -271,10 +274,12 @@
                                                     {{ $editReturnPurchaseData->status === 'Return' ? 'selected' : '' }}>
                                                     Return</option>
                                                 <option value="Pending"
-                                                    {{ $editReturnPurchaseData->status === 'Pending' ? 'selected' : '' }}>Pending
+                                                    {{ $editReturnPurchaseData->status === 'Pending' ? 'selected' : '' }}>
+                                                    Pending
                                                 </option>
                                                 <option value="Ordered"
-                                                    {{ $editReturnPurchaseData->status === 'Ordered' ? 'selected' : '' }}>Ordered
+                                                    {{ $editReturnPurchaseData->status === 'Ordered' ? 'selected' : '' }}>
+                                                    Ordered
                                                 </option>
                                             </select>
                                             @error('status')
@@ -289,22 +294,19 @@
                                     <textarea class="form-control" name="note" rows="3" placeholder="Enter Notes">{{ $editReturnPurchaseData->note }} </textarea>
                                 </div>
                             </div>
-                    </div>
-                </div>
-
-                <div class="col-xl-12">
-                    <div class="d-flex mt-5 justify-content-end">
-                        <button class="btn btn-primary me-3" type="submit">Save</button>
-                        <a class="btn btn-secondary" href="{{ route('return-purchase.index') }}">Cancel</a>
+                            <div class="col-xl-12">
+                                <div class="d-flex mt-5 justify-content-end">
+                                    <button class="btn btn-primary me-3" type="submit">Save</button>
+                                    <a class="btn btn-secondary" href="{{ route('return-purchase.index') }}">Cancel</a>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
-            </form>
         </div>
     </div>
-    </div>
-    </div>
-    </div>
+    
 
 
 
@@ -369,7 +371,7 @@
 
                 //Update hidden input for subtotal
                 row.querySelector("input[name^='products['][name$='][subtotal]']").value = subtotal.toFixed(2);
-                
+
                 //Update grandTotal
                 updateGrandTotal();
             }
@@ -399,7 +401,7 @@
                 document.getElementById("grandTotal").textContent = `TK ${grandTotal.toFixed(2)}`;
 
 
-                
+
                 //Also Update the hidden input field
                 document.getElementById("grandTotalInput").textContent = grandTotal.toFixed(2);
             }

@@ -4,11 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ReturnPurchaseItem extends Model
+class TransferItem extends Model
 {
     protected $fillable = [
-        'id',
-        'return_purchase_id',
+        'transfer_id',
         'product_id',
         'net_unit_cost',
         'stock',
@@ -17,15 +16,14 @@ class ReturnPurchaseItem extends Model
         'subtotal',
     ];
 
-    public function purchase()
-    {
-        return $this->belongsTo(ReturnPurchase::class,'return_purchase_id');
-    }
 
     public function product()
     {
         return $this->belongsTo(Product::class, 'product_id');
     }
 
-    
+    public function transfer()
+    {
+        return $this->belongsTo(Transfer::class);
+    }
 }
