@@ -19,7 +19,7 @@ class ReturnPurchase extends Model
         'shipping',
     ];
 
-    public function returnPurchaseItems()
+    public function purchaseItems()
     {
         return $this->hasMany(ReturnPurchaseItem::class,'return_purchase_id');
     }

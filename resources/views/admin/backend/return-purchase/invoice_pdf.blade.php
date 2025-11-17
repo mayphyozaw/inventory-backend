@@ -219,7 +219,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($purchase->returnPurchaseItems as $key => $item)
+                @foreach ($purchase->purchaseItems as $key => $item)
                     <tr>
                         <td>{{ $key + 1 }}</td>
                         <td>{{ $item->product->name }}</td>

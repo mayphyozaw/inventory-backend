@@ -117,7 +117,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody id="productBody">
-                                                @foreach ($editReturnPurchaseData->returnPurchaseItems as $item)
+                                                @foreach ($editReturnPurchaseData->purchaseItems as $item)
                                                     <tr data-id={{ $item->id }}>
                                                         <td class="d-flex align-items-center gap-2">
                                                             <input type="text" class="form-control"

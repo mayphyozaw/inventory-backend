@@ -118,7 +118,7 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        @foreach ($returnPurchase->returnPurchaseItems as $key=>$item)
+                                                        @foreach ($returnPurchase->purchaseItems as $key=>$item)
                                                             <tr>
                                                             <td>{{$key + 1}}</td>
                                                             <td>{{$item->product->name}}</td>

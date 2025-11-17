@@ -107,7 +107,7 @@ class ReturnPurchaseController extends Controller
 
     public function show($id)
     {
-        $returnPurchase = ReturnPurchase::with(['supplier','returnPurchaseItems.product'])->find($id);
+        $returnPurchase = ReturnPurchase::with(['supplier','purchaseItems.product'])->find($id);
         
         return view('admin.backend.return-purchase.show', compact('returnPurchase'));
     }
@@ -116,7 +116,7 @@ class ReturnPurchaseController extends Controller
 
     public function edit($id)
     {
-        $editReturnPurchaseData = ReturnPurchase::with('returnPurchaseItems.product')->findOrFail($id);
+        $editReturnPurchaseData = ReturnPurchase::with('purchaseItems.product')->findOrFail($id);
         $suppliers = Supplier::all();
         $warehouses = WareHouse::all();
         return view('admin.backend.return-purchase.edit',compact('editReturnPurchaseData','suppliers','warehouses'));
@@ -210,7 +210,7 @@ class ReturnPurchaseController extends Controller
 
     public function invoiceReturnPurchase($id)
     {
-        $purchase = ReturnPurchase::with(['supplier', 'warehouse', 'returnPurchaseItems.product'])->find($id);
+        $purchase = ReturnPurchase::with(['supplier', 'warehouse', 'purchaseItems.product'])->find($id);
         $pdf = Pdf::loadView('admin.backend.return-purchase.invoice_pdf',compact('purchase'));
         return $pdf->download('return-purchase_' . $id. '.pdf');
 

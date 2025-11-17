@@ -215,6 +215,23 @@
                     </div>
                 </li>
 
+                <li>
+                    <a href="#report" data-bs-toggle="collapse">
+                        <i data-feather="bar-chart"></i>
+                        <span> Report Setup </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <div class="collapse" id="report">
+                        <ul class="nav-second-level">
+                            <li>
+                                <a href="{{route('all.report')}}" class="tp-link">All Reports</a>
+                            </li>
+                            
+                            
+                        </ul>
+                    </div>
+                </li>
+
                 
                 <li class="menu-title mt-2">General</li>
 

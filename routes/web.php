@@ -7,6 +7,7 @@ use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\CustomerController;
 use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\PurchaseController;
+use App\Http\Controllers\Backend\ReportController;
 use App\Http\Controllers\Backend\ReturnPurchaseController;
 use App\Http\Controllers\Backend\SaleController;
 use App\Http\Controllers\Backend\SaleReturnController;
@@ -93,6 +94,20 @@ Route::middleware('auth')->group(function (){
 
     Route::resource('transfer',TransferController::class); 
     Route::get('transfer-datatable', [TransferController::class, 'transferDatatable'])->name('transfer-datatable');
+
+    Route::get('/all/report', [ReportController::class, 'allReport'])->name('all.report');
+    Route::get('/purchase/return/report', [ReportController::class, 'purchaseRetrunReport'])->name('purchase.return.report');
+    Route::get('/filter-purchases', [ReportController::class, 'filterPurchases']);
+
+    Route::get('/sales/report', [ReportController::class, 'salesReport'])->name('sales.report');
+    Route::get('/filter-sales', [ReportController::class, 'filterSales']);
+    Route::get('/sales/return/report', [ReportController::class, 'salesRetrunReport'])->name('sales.return.report');
+
+    Route::get('/product/stock/report', [ReportController::class, 'productStockReport'])->name('product.stock.report');
+
+
+
+    
 
 
 });
