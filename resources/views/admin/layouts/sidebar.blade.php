@@ -7,18 +7,18 @@
             <div class="logo-box">
                 <a href="index.html" class="logo logo-light">
                     <span class="logo-sm">
-                        <img src="{{asset('data/logo.png')}}" alt="" height="30">
+                        <img src="{{ asset('data/logo.png') }}" alt="" height="30">
                     </span>
                     <span class="logo-lg">
-                        <img src="{{asset('data/logo.png')}}" alt="" height="40">
+                        <img src="{{ asset('data/logo.png') }}" alt="" height="40">
                     </span>
                 </a>
                 <a href="index.html" class="logo logo-dark">
                     <span class="logo-sm">
-                        <img src="{{asset('data/logo.png')}}" alt="" height="40">
+                        <img src="{{ asset('data/logo.png') }}" alt="" height="40">
                     </span>
                     <span class="logo-lg">
-                        <img src="{{asset('data/logo.png')}}" alt="" height="40">
+                        <img src="{{ asset('data/logo.png') }}" alt="" height="40">
                     </span>
                 </a>
             </div>
@@ -35,7 +35,7 @@
                     </a>
                 </li>
 
-               
+
                 <li class="menu-title">Pages</li>
 
                 <li>
@@ -47,26 +47,26 @@
                     <div class="collapse" id="sidebarAuth">
                         <ul class="nav-second-level">
                             <li>
-                                <a href="{{route('admin-user.index')}}" class="tp-link">All Admin Users</a>
+                                <a href="{{ route('admin-user.index') }}" class="tp-link">All Admin Users</a>
                             </li>
-                            
+
                         </ul>
                     </div>
-                </li>             
+                </li>
 
 
                 <li>
                     <a href="#brand" data-bs-toggle="collapse">
-                       <i data-feather="list"></i>
+                        <i data-feather="list"></i>
                         <span> Brand Manage </span>
                         <span class="menu-arrow"></span>
                     </a>
                     <div class="collapse" id="brand">
                         <ul class="nav-second-level">
                             <li>
-                                <a href="{{route('brand.index')}}" class="tp-link">All Brands</a>
+                                <a href="{{ route('brand.index') }}" class="tp-link">All Brands</a>
                             </li>
-                            
+
                         </ul>
                     </div>
                 </li>
@@ -74,16 +74,16 @@
 
                 <li>
                     <a href="#warehouse" data-bs-toggle="collapse">
-                         <i data-feather="layers"></i>
+                        <i data-feather="layers"></i>
                         <span> Warehouse Manage </span>
                         <span class="menu-arrow"></span>
                     </a>
                     <div class="collapse" id="warehouse">
                         <ul class="nav-second-level">
                             <li>
-                                <a href="{{route('warehouse.index')}}" class="tp-link">All WareHouses</a>
+                                <a href="{{ route('warehouse.index') }}" class="tp-link">All WareHouses</a>
                             </li>
-                            
+
                         </ul>
                     </div>
                 </li>
@@ -97,9 +97,9 @@
                     <div class="collapse" id="supplier">
                         <ul class="nav-second-level">
                             <li>
-                                <a href="{{route('supplier.index')}}" class="tp-link">All Suppliers</a>
+                                <a href="{{ route('supplier.index') }}" class="tp-link">All Suppliers</a>
                             </li>
-                            
+
                         </ul>
                     </div>
                 </li>
@@ -113,33 +113,33 @@
                     <div class="collapse" id="customer">
                         <ul class="nav-second-level">
                             <li>
-                                <a href="{{route('customer.index')}}" class="tp-link">All Customers</a>
+                                <a href="{{ route('customer.index') }}" class="tp-link">All Customers</a>
                             </li>
-                            
+
                         </ul>
                     </div>
                 </li>
 
                 <li>
                     <a href="#product" data-bs-toggle="collapse">
-                         <i data-feather="package"></i>
+                        <i data-feather="package"></i>
                         <span> Product Manage </span>
                         <span class="menu-arrow"></span>
                     </a>
                     <div class="collapse" id="product">
                         <ul class="nav-second-level">
                             <li>
-                                <a href="{{route('category.index')}}" class="tp-link">All Categories</a>
+                                <a href="{{ route('category.index') }}" class="tp-link">All Categories</a>
                             </li>
                             <li>
-                                <a href="{{route('product.index')}}" class="tp-link">All Products</a>
+                                <a href="{{ route('product.index') }}" class="tp-link">All Products</a>
                             </li>
-                            
+
                         </ul>
                     </div>
                 </li>
 
-               <li>
+                <li>
                     <a href="#purchase" data-bs-toggle="collapse">
                         <i data-feather="shopping-bag"></i>
                         <span> Purchase Manage </span>
@@ -148,12 +148,12 @@
                     <div class="collapse" id="purchase">
                         <ul class="nav-second-level">
                             <li>
-                                <a href="{{route('purchase.index')}}" class="tp-link">All Purchase</a>
+                                <a href="{{ route('purchase.index') }}" class="tp-link">All Purchase</a>
                             </li>
                             <li>
-                                <a href="{{route('return-purchase.index')}}" class="tp-link">Purchase Return</a>
+                                <a href="{{ route('return-purchase.index') }}" class="tp-link">Purchase Return</a>
                             </li>
-                            
+
                         </ul>
                     </div>
                 </li>
@@ -168,12 +168,12 @@
                     <div class="collapse" id="sale">
                         <ul class="nav-second-level">
                             <li>
-                                <a href="{{route('sale.index')}}" class="tp-link">All Sales</a>
+                                <a href="{{ route('sale.index') }}" class="tp-link">All Sales</a>
                             </li>
                             <li>
-                                <a href="{{route('sale-return.index')}}" class="tp-link">Sale Return</a>
+                                <a href="{{ route('sale-return.index') }}" class="tp-link">Sale Return</a>
                             </li>
-                            
+
                         </ul>
                     </div>
                 </li>
@@ -187,12 +187,12 @@
                     <div class="collapse" id="due">
                         <ul class="nav-second-level">
                             <li>
-                                <a href="{{route('due.sale_due')}}" class="tp-link">Sale Due</a>
+                                <a href="{{ route('due.sale_due') }}" class="tp-link">Sale Due</a>
                             </li>
                             <li>
-                                <a href="{{route('due.sale_return_due')}}" class="tp-link">Sale Return Due</a>
+                                <a href="{{ route('due.sale_return_due') }}" class="tp-link">Sale Return Due</a>
                             </li>
-                            
+
                         </ul>
                     </div>
                 </li>
@@ -207,10 +207,10 @@
                     <div class="collapse" id="transfers">
                         <ul class="nav-second-level">
                             <li>
-                                <a href="{{route('transfer.index')}}" class="tp-link">All Transfers</a>
+                                <a href="{{ route('transfer.index') }}" class="tp-link">All Transfers</a>
                             </li>
-                            
-                            
+
+
                         </ul>
                     </div>
                 </li>
@@ -224,128 +224,66 @@
                     <div class="collapse" id="report">
                         <ul class="nav-second-level">
                             <li>
-                                <a href="{{route('all.report')}}" class="tp-link">All Reports</a>
+                                <a href="{{ route('all.report') }}" class="tp-link">All Reports</a>
                             </li>
-                            
-                            
+
+
                         </ul>
                     </div>
                 </li>
 
-                
-                <li class="menu-title mt-2">General</li>
-
                 <li>
-                    <a href="#sidebarBaseui" data-bs-toggle="collapse">
-                        <i data-feather="package"></i>
-                        <span> Components </span>
+                    <a href="#role" data-bs-toggle="collapse">
+                        <i data-feather="shield"></i>
+                        <span> Roles </span>
                         <span class="menu-arrow"></span>
                     </a>
-                    <div class="collapse" id="sidebarBaseui">
+                    <div class="collapse" id="role">
                         <ul class="nav-second-level">
                             <li>
-                                <a href="ui-accordions.html" class="tp-link">Accordions</a>
+                                <a href="{{ route('role.index') }}" class="tp-link">Roles</a>
                             </li>
-                            <li>
-                                <a href="ui-alerts.html" class="tp-link">Alerts</a>
-                            </li>
-                            <li>
-                                <a href="ui-badges.html" class="tp-link">Badges</a>
-                            </li>
-                            <li>
-                                <a href="ui-breadcrumb.html" class="tp-link">Breadcrumb</a>
-                            </li>
-                            <li>
-                                <a href="ui-buttons.html" class="tp-link">Buttons</a>
-                            </li>
-                            <li>
-                                <a href="ui-cards.html" class="tp-link">Cards</a>
-                            </li>
-                            <li>
-                                <a href="ui-collapse.html" class="tp-link">Collapse</a>
-                            </li>
-                            <li>
-                                <a href="ui-dropdowns.html" class="tp-link">Dropdowns</a>
-                            </li>
-                            <li>
-                                <a href="ui-video.html" class="tp-link">Embed Video</a>
-                            </li>
-                            <li>
-                                <a href="ui-grid.html" class="tp-link">Grid</a>
-                            </li>
-                            <li>
-                                <a href="ui-images.html" class="tp-link">Images</a>
-                            </li>
-                            <li>
-                                <a href="ui-list.html" class="tp-link">List Group</a>
-                            </li>
-                            <li>
-                                <a href="ui-modals.html" class="tp-link">Modals</a>
-                            </li>
-                            <li>
-                                <a href="ui-placeholders.html" class="tp-link">Placeholders</a>
-                            </li>
-                            <li>
-                                <a href="ui-pagination.html" class="tp-link">Pagination</a>
-                            </li>
-                            <li>
-                                <a href="ui-popovers.html" class="tp-link">Popovers</a>
-                            </li>
-                            <li>
-                                <a href="ui-progress.html" class="tp-link">Progress</a>
-                            </li>
-                            <li>
-                                <a href="ui-scrollspy.html" class="tp-link">Scrollspy</a>
-                            </li>
-                            <li>
-                                <a href="ui-spinners.html" class="tp-link">Spinners</a>
-                            </li>
-                            <li>
-                                <a href="ui-tabs.html" class="tp-link">Tabs</a>
-                            </li>
-                            <li>
-                                <a href="ui-tooltips.html" class="tp-link">Tooltips</a>
-                            </li>
-                            <li>
-                                <a href="ui-typography.html" class="tp-link">Typography</a>
-                            </li>
+
+
                         </ul>
                     </div>
                 </li>
 
                 <li>
-                    <a href="widgets.html" class="tp-link">
-                        <i data-feather="aperture"></i>
-                        <span> Widgets </span>
-                    </a>
-                </li>
-
-                <li>
-                    <a href="#sidebarAdvancedUI" data-bs-toggle="collapse">
-                        <i data-feather="cpu"></i>
-                        <span> Extended UI </span>
+                    <a href="#permission" data-bs-toggle="collapse">
+                        <i data-feather="shield"></i>
+                        <span> Permission </span>
                         <span class="menu-arrow"></span>
                     </a>
-                    <div class="collapse" id="sidebarAdvancedUI">
+                    <div class="collapse" id="permission">
                         <ul class="nav-second-level">
                             <li>
-                                <a href="extended-carousel.html" class="tp-link">Carousel</a>
+                                <a href="{{ route('permission.index') }}" class="tp-link">Permission</a>
                             </li>
-                            <li>
-                                <a href="extended-notifications.html" class="tp-link">Notifications</a>
-                            </li>
-                            <li>
-                                <a href="extended-offcanvas.html" class="tp-link">Offcanvas</a>
-                            </li>
-                            <li>
-                                <a href="extended-range-slider.html" class="tp-link">Range Slider</a>
-                            </li>
+
+
                         </ul>
                     </div>
                 </li>
 
-                
+                <li>
+                    <a href="#rolespermission" data-bs-toggle="collapse">
+                        <i data-feather="shield"></i>
+                        <span> Roles in Permission </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                <div class="collapse" id="rolespermission">
+                    <ul class="nav-second-level">
+                        
+                        <li>
+                            <a href="{{ route('add.roles.permission') }}" class="tp-link">Roles in Permission</a>
+                        </li>
 
+
+                    </ul>
+                </div>
+
+                </li>
             </ul>
 
         </div>

@@ -5,10 +5,12 @@ use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\Backend\BrandController;
 use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\CustomerController;
+use App\Http\Controllers\Backend\PermissionController;
 use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\PurchaseController;
 use App\Http\Controllers\Backend\ReportController;
 use App\Http\Controllers\Backend\ReturnPurchaseController;
+use App\Http\Controllers\Backend\RoleController;
 use App\Http\Controllers\Backend\SaleController;
 use App\Http\Controllers\Backend\SaleReturnController;
 use App\Http\Controllers\Backend\SupplierController;
@@ -36,19 +38,18 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
-Route::get('admin/logout',[AdminController::class, 'adminLogout'])->name('admin.logout');
+Route::get('admin/logout', [AdminController::class, 'adminLogout'])->name('admin.logout');
 
 Route::middleware('auth')->group(function () {
-    Route::resource('admin-user',AdminUserController::class);
+    Route::resource('admin-user', AdminUserController::class);
     Route::get('change-password', [PasswordController::class, 'edit'])->name('change-password.edit');
     Route::put('change-password', [PasswordController::class, 'update'])->name('change-password.update');
-
 });
 
-Route::middleware('auth')->group(function (){
-    Route::resource('brand',BrandController::class);
+Route::middleware('auth')->group(function () {
+    Route::resource('brand', BrandController::class);
     Route::get('brand-datatable', [BrandController::class, 'brandDatatable'])->name('brand-datatable');
 
 
@@ -57,10 +58,10 @@ Route::middleware('auth')->group(function (){
 
     Route::resource('supplier', SupplierController::class);
     Route::get('supplier-datatable', [SupplierController::class, 'supplierDatatable'])->name('supplier-datatable');
-    
+
     Route::resource('customer', CustomerController::class);
     Route::get('customer-datatable', [CustomerController::class, 'customerDatatable'])->name('customer-datatable');
-    
+
     Route::resource('category', CategoryController::class);
     Route::get('category-datatable', [CategoryController::class, 'categoryDatatable'])->name('category-datatable');
 
@@ -85,14 +86,14 @@ Route::middleware('auth')->group(function (){
     Route::resource('sale-return', SaleReturnController::class);
     Route::get('sale-return-datatable', [SaleReturnController::class, 'saleReturnDatatable'])->name('sale-return-datatable');
     Route::get('/invoice/sale-return/{id}', [SaleReturnController::class, 'invoiceSaleReturn'])->name('invoice.sale-return');
-    
+
 
     Route::get('due/sale_due', [DueController::class, 'dueSale'])->name('due.sale_due');
     Route::get('saleDue-datatable', [DueController::class, 'saleDueDatatable'])->name('saleDue-datatable');
-    Route::get('due/sale_return_due',[DueController::class,'dueSaleReturn'])->name('due.sale_return_due');
+    Route::get('due/sale_return_due', [DueController::class, 'dueSaleReturn'])->name('due.sale_return_due');
     Route::get('saleReturnDue-datatable', [DueController::class, 'saleReturnDueDatatable'])->name('saleReturnDue-datatable');
 
-    Route::resource('transfer',TransferController::class); 
+    Route::resource('transfer', TransferController::class);
     Route::get('transfer-datatable', [TransferController::class, 'transferDatatable'])->name('transfer-datatable');
 
     Route::get('/all/report', [ReportController::class, 'allReport'])->name('all.report');
@@ -106,8 +107,13 @@ Route::middleware('auth')->group(function (){
     Route::get('/product/stock/report', [ReportController::class, 'productStockReport'])->name('product.stock.report');
 
 
+    Route::resource('role', RoleController::class);
+    Route::get('role-datatable', [RoleController::class, 'roleDatatable'])->name('role-datatable');
 
-    
+    Route::resource('permission', PermissionController::class);
+    Route::get('permission-datatable', [PermissionController::class, 'permissionDatatable'])->name('permission-datatable');
 
 
+    Route::get('add/roles/permission', [RoleController::class, 'addRolesPermission'])->name('add.roles.permission');
+    Route::post('roles/permission/store', [RoleController::class, 'rolePermissionStore'])->name('role.permission.store');
 });
