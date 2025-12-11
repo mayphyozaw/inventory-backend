@@ -24,6 +24,10 @@ class SupplierController extends Controller
 
     public function index()
     {
+        if(!auth()->user()->hasPermissionTo('all_suppliers')){
+            abort(403, 'Unauthorized Action');
+        }
+
         $supplier = Supplier::all();
         return view('admin.backend.supplier.index',compact('supplier'));
     }
@@ -62,6 +66,10 @@ class SupplierController extends Controller
 
     public function edit($id)
     {
+        if(!auth()->user()->hasPermissionTo('edit_supplier')){
+            abort(403, 'Unauthorized Action');
+        }
+        
         $supplier = Supplier::findOrFail($id);
         return view('admin.backend.supplier.edit', compact('supplier')); 
     }
@@ -91,6 +99,10 @@ class SupplierController extends Controller
 
     public function destroy($id)
     {
+        if(!auth()->user()->hasPermissionTo('delete_supplier')){
+            abort(403, 'Unauthorized Action');
+        }
+
         try {
             $this->supplierRepository->delete($id);
 

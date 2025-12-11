@@ -15,7 +15,6 @@
 
                 <div class="text-end">
                     <ol class="breadcrumb m-0 py-0">
-                        <li class="breadcrumb-item"><a href="{{ route('permission.index') }}">Role In Permission</a></li>
                         <li class="breadcrumb-item active">Add Role In Permission</li>
                     </ol>
                 </div>
@@ -30,9 +29,9 @@
                         </div><!-- end card header -->
 
                         <div class="card-body">
-                            <form class="row g-3" action="{{ route('role.permission.store') }}" method="post" id="submit-form">
+                            <form class="row g-3" action="{{ route('role.permission.store') }}" method="post"
+                                id="submit-form">
                                 @csrf
-
 
                                 <div class="col-md-6">
                                     <label for="validationDefault01" class="form-label">Role Name</label>
@@ -42,37 +41,38 @@
                                             <option value="{{ $role->id }}"> {{ $role->name }} </option>
                                         @endforeach
                                     </select>
+                                    @error('role_id')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
                                 </div>
 
                                 <div class="form-check mb-2">
-                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                    <label class="form-check-label" for="flexCheckDefault">
+                                    <input class="form-check-input" type="checkbox" id="permission_all">
+                                    <label class="form-check-label" for="permission_all">
                                         Permission All
                                     </label>
                                 </div>
                                 <hr>
+
                                 @foreach ($permission_groups as $group => $permissions)
-                                {{-- @foreach ($permission_groups as $group) --}}
                                     <div class="row">
                                         <div class="col-3">
                                             <div class="form-check mb-2">
-                                                <input class="form-check-input" type="checkbox" value=""
-                                                    id="flexCheckDefault">
-                                                <label class="form-check-label" for="flexCheckDefault">
-                                                    {{ $group}}
+                                                <input class="form-check-input group-checkbox" type="checkbox"
+                                                    data-group="{{ $group }}" id="group_{{ $loop->index }}">
+                                                <label class="form-check-label" for="group_{{ $loop->index }}">
+                                                    {{ $group }}
                                                 </label>
                                             </div>
                                         </div>
 
                                         <div class="col-9">
-                                            {{-- @php
-                                            $permissions = App\Models\User::getpermissionGroupByName($group->group_name);
-                                            @endphp --}}
-
                                             @foreach ($permissions as $permission)
                                                 <div class="form-check mb-2">
-                                                    <input class="form-check-input" name="permission[]" type="checkbox"
-                                                        value="{{ $permission->id }}" id="checkbox_{{ $permission->id }}">
+                                                    <input class="form-check-input permission-checkbox" name="permission[]"
+                                                        type="checkbox" value="{{ $permission->id }}"
+                                                        data-group="{{ $group }}"
+                                                        id="checkbox_{{ $permission->id }}">
                                                     <label class="form-check-label" for="checkbox_{{ $permission->id }}">
                                                         {{ $permission->name }}
                                                     </label>
@@ -82,6 +82,16 @@
                                         </div>
                                     </div>
                                 @endforeach
+
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        @error('permission')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                </div>
+
                                 <div class="col-12">
                                     <button class="btn btn-primary" type="submit">Save</button>
                                 </div>
@@ -90,16 +100,28 @@
                     </div>
                 </div>
 
-
             </div>
-
         </div>
-
     </div>
 
 
 
     @push('scripts')
-        {!! JsValidator::formRequest('App\Http\Requests\Permission\PermissionStoreRequest', '#submit-form') !!}
+        <script>
+            document.getElementById('permission_all').addEventListener('change', function() {
+                let checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                checkboxes.forEach(cb => cb.checked = this.checked);
+            });
+
+            document.querySelectorAll('.group-checkbox').forEach(groupCb => {
+                groupCb.addEventListener('change', function() {
+                    let groupName = this.getAttribute('data-group');
+                    let groupPermissions = document.querySelectorAll(
+                        `.permission-checkbox[data-group="${groupName}"]`
+                    );
+                    groupPermissions.forEach(cb => cb.checked = this.checked);
+                });
+            });
+        </script>
     @endpush
 @endsection

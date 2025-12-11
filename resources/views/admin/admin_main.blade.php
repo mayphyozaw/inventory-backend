@@ -69,17 +69,12 @@
     <script src="{{ asset('backend/assets/libs/jquery.counterup/jquery.counterup.min.js') }}"></script>
     <script src="{{ asset('backend/assets/libs/feather-icons/feather.min.js') }}"></script>
 
-    <script src="{{ asset('backend/assets/libs/apexcharts/apexcharts.min.js') }}"></script>
-
-    <script src="https://apexcharts.com/samples/assets/stock-prices.js"></script>
-
-    <script src="{{ asset('backend/assets/js/pages/analytics-dashboard.init.js') }}"></script>
+    {{-- <script src="{{ asset('backend/assets/libs/apexcharts/apexcharts.min.js') }}"></script> --}}
+    {{-- <script src="https://apexcharts.com/samples/assets/stock-prices.js"></script> --}}
+    {{-- <script src="{{ asset('backend/assets/js/pages/analytics-dashboard.init.js') }}"></script> --}}
 
     <!-- Sweet Alert 2 -->
-
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-
 
     <script src="{{ asset('backend/assets/js/code.js') }}"></script>
     <script src="{{ asset('backend/assets/js/custom.js') }}"></script>
@@ -115,9 +110,12 @@
     <!-- Laravel Javascript Validation -->
     <script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js') }}"></script>
 
+    {{-- Chart --}}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script>
         @if (Session::has('message'))
-            var type = "{{ Session::get('alert-type', 'info') }}"
+            var type = "{{ Session::get('alert-type', 'success') }}"
             switch (type) {
                 case 'info':
                     toastr.info("{{ Session::get('message') }}");

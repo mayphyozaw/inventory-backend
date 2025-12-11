@@ -2,10 +2,17 @@
     <i class="fa fa-eye"></i>
 </x-edit-button>
 
+
+@if(Auth::guard('web')->user()->can('edit_transfer'))
 <x-edit-button href="{{ route('transfer.edit', $transfer->id) }}" class="btn btn-info btn-sm" style="background-color:#1da0a3" title="Edit">
     <i class="fa fa-edit"></i>
 </x-edit-button>
+@endif
 
+
+
+@if(Auth::guard('web')->user()->can('delete_transfer'))
 <x-delete-button href="#" class="btn btn-danger btn-sm deleteBtn" data-url="{{ route('transfer.destroy',$transfer->id) }}" style="background-color: red" title="Delete">
     <i class="fa fa-trash-can"></i>
 </x-delete-button>
+@endif

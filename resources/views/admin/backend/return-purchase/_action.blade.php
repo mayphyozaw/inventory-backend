@@ -6,12 +6,14 @@
     <i class="fa-solid fa-download"></i>
 </x-edit-button>
 
-
+@if(Auth::guard('web')->user()->can('edit_purchase_return'))
 <x-edit-button href="{{ route('return-purchase.edit', $returnPurchase->id) }}" class="btn btn-info btn-sm" style="background-color:#1da0a3" title="Edit">
     <i class="fa fa-edit"></i>
 </x-edit-button>
+@endif
 
-
+@if(Auth::guard('web')->user()->can('delete_purchase_return'))
 <x-delete-button href="#" class="btn btn-danger btn-sm deleteBtn" data-url="{{ route('return-purchase.destroy',$returnPurchase->id) }}" style="background-color: red" title="Delete">
     <i class="fa fa-trash-can"></i>
 </x-delete-button>
+@endif

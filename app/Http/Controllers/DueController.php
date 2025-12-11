@@ -22,7 +22,10 @@ class DueController extends Controller
     
     public function dueSale()
     {
-        
+        if(!auth()->user()->hasPermissionTo('sale_due')){
+            abort(403, 'Unauthorized Action');
+        }
+
         $sales = Sale::with(['customer','warehouse'])
                 ->select('id','customer_id','warehouse_id','due_amount')
                 ->where('due_amount','>', 0)
@@ -41,6 +44,12 @@ class DueController extends Controller
 
     public function dueSaleReturn()
     {
+        
+        if(!auth()->user()->hasPermissionTo('sale_return_due')){
+            abort(403, 'Unauthorized Action');
+        }
+
+
         $sales = SaleReturn::with(['customer','warehouse'])
                 ->select('id','customer_id','warehouse_id','due_amount')
                 ->where('due_amount', '>', 0)

@@ -25,6 +25,10 @@ class TransferController extends Controller
 
     public function index()
     {
+        if(!auth()->user()->hasPermissionTo('all_transfer')){
+            abort(403, 'Unauthorized Action');
+        } 
+
         $allData = Transfer::with(['transferItems.product'])->orderBy('id', 'desc')->get();
         return view('admin.backend.transfer.index', compact('allData'));
     }
@@ -117,6 +121,10 @@ class TransferController extends Controller
 
     public function edit($id)
     {
+        if(!auth()->user()->hasPermissionTo('edit_transfer')){
+            abort(403, 'Unauthorized Action');
+        }
+
         $editTransferData = Transfer::with('fromWarehouse', 'toWarehouse', 'transferItems.product')->findOrFail($id);
         $warehouses = WareHouse::all();
         return view('admin.backend.transfer.edit', compact('editTransferData', 'warehouses'));
@@ -192,6 +200,11 @@ class TransferController extends Controller
 
     public function destroy($id)
     {
+        
+        if(!auth()->user()->hasPermissionTo('delete_transfer')){
+            abort(403, 'Unauthorized Action');
+        }
+        
         try {
             
             $transfer = Transfer::findOrFail($id);

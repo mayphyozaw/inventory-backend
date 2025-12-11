@@ -49,10 +49,16 @@
                                         <option value="Customer" {{ $permission->group_name === 'Customer' ? 'selected' : '' }}> Customer </option>
                                         <option value="Product" {{ $permission->group_name === 'Product' ? 'selected' : '' }}> Product </option>
                                         <option value="Purchase" {{ $permission->group_name === 'Purchase' ? 'selected' : '' }}> Purchase </option>
+                                        <option value="PurchaseReturn" {{ $permission->group_name === 'PurchaseReturn' ? 'selected' : '' }}> Purchase Return</option>
                                         <option value="Sale" {{ $permission->group_name === 'Sale' ? 'selected' : '' }}> Sale </option>
+                                        <option value="SaleReturn" {{ $permission->group_name === 'SaleReturn' ? 'selected' : '' }}> Sale Return </option>
                                         <option value="Due" {{ $permission->group_name === 'Due' ? 'selected' : '' }}> Due </option>
                                         <option value="Transfer" {{ $permission->group_name === 'Transfer' ? 'selected' : '' }}> Transfer </option>
                                         <option value="Report" {{ $permission->group_name === 'Report' ? 'selected' : '' }}> Report </option>
+                                        <option value="Role" {{ $permission->group_name === 'Role' ? 'selected' : '' }}> Roles </option>
+                                        <option value="Permission" {{ $permission->group_name === 'Permission' ? 'selected' : '' }}> Permission </option>
+                                        <option value="RolesInPermission" {{ $permission->group_name === 'RolesInPermission' ? 'selected' : '' }}> Roles In Permission </option>
+                                        <option value="ManageAdmin" {{ $permission->group_name === 'ManageAdmin' ? 'selected' : '' }}> Manage Admin </option>
                                     </select>
                                 </div>
 

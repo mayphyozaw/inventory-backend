@@ -25,6 +25,10 @@ class CustomerController extends Controller
 
     public function index()
     {
+        if(!auth()->user()->hasPermissionTo('all_customers')){
+            abort(403, 'Unauthorized Action');
+        }
+
         $customer = Customer::all();
         return view('admin.backend.customer.index',compact('customer'));
     }
@@ -63,6 +67,10 @@ class CustomerController extends Controller
 
     public function edit($id)
     {
+        if(!auth()->user()->hasPermissionTo('edit_customer')){
+            abort(403, 'Unauthorized Action');
+        }
+        
         $customer = Customer::findOrFail($id);
         return view('admin.backend.customer.edit', compact('customer')); 
     }
@@ -92,6 +100,10 @@ class CustomerController extends Controller
 
     public function destroy($id)
     {
+        if(!auth()->user()->hasPermissionTo('delete_customer')){
+            abort(403, 'Unauthorized Action');
+        }
+        
         try {
             $this->customerRepository->delete($id);
 

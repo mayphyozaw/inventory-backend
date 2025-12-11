@@ -27,6 +27,10 @@ class PurchaseController extends Controller
 
     public function index()
     {
+        if(!auth()->user()->hasPermissionTo('all_purchase')){
+            abort(403, 'Unauthorized Action');
+        }
+        
         $purchaseData = Purchase::orderBy('id', 'desc')->get();
         return view('admin.backend.purchase.index', compact('purchaseData'));
     }
@@ -126,6 +130,10 @@ class PurchaseController extends Controller
 
     public function edit($id)
     {
+        if(!auth()->user()->hasPermissionTo('edit_purchase')){
+            abort(403, 'Unauthorized Action');
+        }
+        
         $editPurchaseData = Purchase::with('purchaseItems.product')->findOrFail($id);
         $suppliers = Supplier::all();
         $warehouses = WareHouse::all();
@@ -211,6 +219,10 @@ class PurchaseController extends Controller
 
     public function destroy($id)
     {
+        if(!auth()->user()->hasPermissionTo('delete_purchase')){
+            abort(403, 'Unauthorized Action');
+        }
+        
         try {
             $purchase = Purchase::findOrFail($id);
             $purchaseItems = PurchaseItem::where('purchase_id',$id)->get();

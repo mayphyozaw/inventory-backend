@@ -25,6 +25,10 @@ class CategoryController extends Controller
     
     public function index()
     {
+        if(!auth()->user()->hasPermissionTo('all_categories')){
+            abort(403, 'Unauthorized Action');
+        }
+        
         $category = ProductCategory::all();
         return view('admin.backend.productCategory.index',compact('category'));
     }
@@ -63,6 +67,10 @@ class CategoryController extends Controller
 
     public function edit($id)
     {
+        if(!auth()->user()->hasPermissionTo('edit_category')){
+            abort(403, 'Unauthorized Action');
+        }
+        
         $category = ProductCategory::findOrFail($id);
         return view('admin.backend.productCategory.edit', compact('category')); 
     }
@@ -90,6 +98,11 @@ class CategoryController extends Controller
 
     public function destroy($id)
     {
+        
+        if(!auth()->user()->hasPermissionTo('delete_category')){
+            abort(403, 'Unauthorized Action');
+        }
+
         try {
             $this->categoryRepository->delete($id);
 

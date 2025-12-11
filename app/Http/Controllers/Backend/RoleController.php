@@ -14,26 +14,31 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use Yajra\DataTables\Facades\DataTables;
 
 class RoleController extends Controller
 {
     protected $roleRepository;
 
-     public function __construct(RoleRepository $roleRepository)
+    public function __construct(RoleRepository $roleRepository)
     {
         $this->roleRepository = $roleRepository;
     }
 
     public function index()
     {
+        if(!auth()->user()->hasPermissionTo('all_roles')){
+            abort(403, 'Unauthorized Action');
+        }
+        
         $role = Role::all();
-        return view('admin.backend.role.index',compact('role'));
+        return view('admin.backend.role.index', compact('role'));
     }
 
     public function create()
     {
         $permissions = Permission::all();
-        return view('admin.backend.role.create',compact('permissions'));
+        return view('admin.backend.role.create', compact('permissions'));
     }
 
     public function store(RoleStoreRequest $request)
@@ -42,13 +47,13 @@ class RoleController extends Controller
         try {
             $role = $this->roleRepository->create([
                 'name'  => $request->name,
-                
+
             ]);
             $role->givePermissionTo($request->permissions);
-            
+
             return Redirect::route('role.index')->with('success', 'Successfully created');
         } catch (Exception $e) {
-            
+
             return back()->with('error', $e->getMessage())->withInput();
         }
     }
@@ -62,20 +67,23 @@ class RoleController extends Controller
 
     public function edit($id)
     {
+        if(!auth()->user()->hasPermissionTo('edit_role')){
+            abort(403, 'Unauthorized Action');
+        }
+        
         $role = Role::findOrFail($id);
         $old_permissions = $role->permissions->pluck('id')->toArray();
         $permissions = Permission::all();
-        return view('admin.backend.role.edit', compact('role','old_permissions','permissions')); 
+        return view('admin.backend.role.edit', compact('role', 'old_permissions', 'permissions'));
     }
 
     public function update(RoleUpdateRequest $request, $id)
     {
-       
 
         try {
             $role = $this->roleRepository->update($id, [
                 'name'  => $request->name,
-                
+
             ]);
             $old_permissions = $role->permissions->pluck('name')->toArray();
             $role->revokePermissionTo($old_permissions);
@@ -86,7 +94,6 @@ class RoleController extends Controller
                 'alert-type' => 'success'
             ]);
         } catch (Exception $e) {
-           
             return back()->with('error', $e->getMessage())->withInput();
         }
     }
@@ -94,6 +101,10 @@ class RoleController extends Controller
 
     public function destroy($id)
     {
+        if(!auth()->user()->hasPermissionTo('delete_role')){
+            abort(403, 'Unauthorized Action');
+        }
+        
         try {
             $this->roleRepository->delete($id);
 
@@ -104,32 +115,22 @@ class RoleController extends Controller
     }
 
 
-    // Role in Permission All Methods 
-    public function addRolesPermission()
-    {
-        $roles = Role::all();
-        $permissions = Permission::all();
-        // $permission_groups = User::getpermissionGroups();
-        $permission_groups = Permission::all()->groupBy('group_name');
-        // $permissions_group_names = User::getermissionGroupByName(Permission::$group->group_name);
-        return view('admin.backend.rolesetup.add_roles_permission', compact('roles','permissions','permission_groups'));
-    }
+    // public function adminUpdateRolesPermssions(Request $request, $id)
+    // {
+    //     try {
+    //         $role = Role::findOrFail($id);
+    //         $permission_groups = Permission::all()->groupBy('group_name');
 
-    public function rolePermissionStore(Request $request)
-    {
-        $data = array();
-        $permissions = $request->permission;
-        
-        foreach ($permissions as $key => $item) {
-            $data['role_id'] = $request->role_id;
-            $data['permission_id'] = $item;
-        }
-       
-        DB::table('role_has_permissions')->insert($data);
+    //         $old_permissions_ids = $role->permissions->pluck('id')->toArray();
 
-        return redirect()->route('role.index')->with([
-                'message' => 'Role Permission updated successfully!',
-                'alert-type' => 'success'
-            ]);
-    }
+    //         return view(
+    //             'admin.backend.rolesetup.edit_roles_permission',
+    //             compact('role', 'permission_groups', 'old_permissions_ids')
+    //         );
+    //     } catch (Exception $e) {
+    //         return back()->with('error', $e->getMessage())->withInput();
+    //     }
+    // }
+
+    
 }

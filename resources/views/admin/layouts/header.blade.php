@@ -29,9 +29,9 @@
                     <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
                         aria-haspopup="false" aria-expanded="false">
                         <i data-feather="bell" class="noti-icon"></i>
-                        <span class="badge bg-danger rounded-circle noti-icon-badge">9</span>
+                        <span class="badge bg-danger rounded-circle noti-icon-badge">{{ $productNameAll }}</span>
                     </a>
-                    <div class="dropdown-menu dropdown-menu-end dropdown-lg">
+                    {{-- <div class="dropdown-menu dropdown-menu-end dropdown-lg">
 
                         <!-- item-->
                         <div class="dropdown-item noti-title">
@@ -114,7 +114,7 @@
                             <i class="fe-arrow-right"></i>
                         </a>
 
-                    </div>
+                    </div> --}}
                 </li>
 
                 <li class="dropdown notification-list topbar-dropdown">
@@ -137,7 +137,7 @@
                         </div>
 
                         <!-- item-->
-                        <a href="pages-profile.html" class="dropdown-item notify-item">
+                        <a href="{{ route('admin.profile') }}" class="dropdown-item notify-item">
                             <i class="mdi mdi-account-circle-outline fs-16 align-middle"></i>
                             <span>My Account</span>
                         </a>

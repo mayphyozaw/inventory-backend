@@ -29,6 +29,10 @@ class ProductController extends Controller
 
     public function index()
     {
+        if(!auth()->user()->hasPermissionTo('all_product')){
+            abort(403, 'Unauthorized Action');
+        }
+        
         $product = Product::orderBy('id', 'desc')->get();
         return view('admin.backend.product.index', compact('product'));
     }
@@ -93,6 +97,10 @@ class ProductController extends Controller
 
     public function edit($id)
     {
+        if(!auth()->user()->hasPermissionTo('edit_product')){
+            abort(403, 'Unauthorized Action');
+        }
+        
         $productEditData = Product::findOrFail($id);
         $categories = ProductCategory::all();
         $brands = Brand::all();
@@ -153,6 +161,10 @@ class ProductController extends Controller
 
     public function destroy($id)
     {
+        if(!auth()->user()->hasPermissionTo('delete_product')){
+            abort(403, 'Unauthorized Action');
+        }
+        
         try {
             $this->productRepository->delete($id);
             return ResponseService::success([], 'Successfully deleted');

@@ -24,6 +24,10 @@ class WareHouseController extends Controller
 
     public function index()
     {
+        if(!auth()->user()->hasPermissionTo('all_warehouse')){
+            abort(403, 'Unauthorized Action');
+        }
+        
         $warehouse = WareHouse::all();
         return view('admin.backend.warehouse.index', compact('warehouse'));
     }
@@ -62,6 +66,10 @@ class WareHouseController extends Controller
 
     public function edit($id)
     {
+        if(!auth()->user()->hasPermissionTo('edit_warehouse')){
+            abort(403, 'Unauthorized Action');
+        }
+
         $warehouse = WareHouse::findOrFail($id);
         return view('admin.backend.warehouse.edit', compact('warehouse')); 
     }
@@ -91,6 +99,10 @@ class WareHouseController extends Controller
 
     public function destroy($id)
     {
+        if(!auth()->user()->hasPermissionTo('delete_warehouse')){
+            abort(403, 'Unauthorized Action');
+        }
+
         try {
             $this->warehouseRepository->delete($id);
 

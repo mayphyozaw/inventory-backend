@@ -27,6 +27,11 @@ class SaleReturnController extends Controller
 
     public function index()
     {
+
+        if(!auth()->user()->hasPermissionTo('all_sale_return')){
+            abort(403, 'Unauthorized Action');
+        }
+        
         $saleReturnData = SaleReturn::orderBy('id', 'desc')->get();
         return view('admin.backend.sale-return.index', compact('saleReturnData'));
     }
@@ -108,6 +113,10 @@ class SaleReturnController extends Controller
 
     public function edit($id)
     {
+        if(!auth()->user()->hasPermissionTo('edit_sale_return')){
+            abort(403, 'Unauthorized Action');
+        }
+        
         $editSaleReturnData = SaleReturn::with('saleReturnItems.product')->findOrFail($id);
         $customers = Customer::all();
         $warehouses = WareHouse::all();
@@ -171,6 +180,10 @@ class SaleReturnController extends Controller
 
     public function destroy($id)
     {
+        if(!auth()->user()->hasPermissionTo('delete_sale_return')){
+            abort(403, 'Unauthorized Action');
+        }
+        
         try {
             $saleReturn = SaleReturn::findOrFail($id);
             $saleIReturntems = SaleReturnItem::where('sale_return_id', $id)->get();

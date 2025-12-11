@@ -25,6 +25,10 @@ class ReturnPurchaseController extends Controller
     
     public function index()
     {
+        if(!auth()->user()->hasPermissionTo('all_purchase_return')){
+            abort(403, 'Unauthorized Action');
+        }
+        
         $returnPurchaseData = ReturnPurchase::orderBy('id', 'desc')->get();
         return view('admin.backend.return-purchase.index', compact('returnPurchaseData'));
     }
@@ -116,6 +120,10 @@ class ReturnPurchaseController extends Controller
 
     public function edit($id)
     {
+        if(!auth()->user()->hasPermissionTo('edit_purchase_return')){
+            abort(403, 'Unauthorized Action');
+        }
+        
         $editReturnPurchaseData = ReturnPurchase::with('purchaseItems.product')->findOrFail($id);
         $suppliers = Supplier::all();
         $warehouses = WareHouse::all();
@@ -186,6 +194,10 @@ class ReturnPurchaseController extends Controller
 
     public function destroy($id)
     {
+        if(!auth()->user()->hasPermissionTo('delete_purchase_return')){
+            abort(403, 'Unauthorized Action');
+        }
+        
         try {
             $returnPurchase = ReturnPurchase::findOrFail($id);
             $returnPurchaseItems = ReturnPurchaseItem::where('return_purchase_id',$id)->get();

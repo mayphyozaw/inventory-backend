@@ -5,8 +5,13 @@ document.addEventListener("DOMContentLoaded", function () {
     let warehouseError = document.getElementById("warehouse_error");
     let orderItemsTableBody = document.querySelector("tbody");
 
+    if (!productSearchInput || !warehouseDropDown || !productList) {
+        return;
+    }
+
     // --- PRODUCT SEARCH ---
-    productSearchInput.addEventListener("keyup", function () {
+    if(productSearchInput){
+        productSearchInput.addEventListener("keyup", function () {
         let query = this.value.trim();
         let warehouse_id = warehouseDropDown.value;
 
@@ -25,6 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
+    }
     // --- FETCH PRODUCTS ---
     function fetchProducts(query, warehouse_id) {
         fetch(
@@ -257,8 +263,6 @@ document.addEventListener("DOMContentLoaded", function () {
         updateDueAmount();
     }
 
-
-    
     // Manage Due for sale page
     function updateDueAmount() {
         let grandTotal =
@@ -269,7 +273,7 @@ document.addEventListener("DOMContentLoaded", function () {
             parseFloat(
                 document.querySelector("input[name='paid_amount']").value
             ) || 0;
-            // new add full paid functionality 
+        // new add full paid functionality
         let fullPaidAmount =
             parseFloat(
                 document.querySelector("input[name='full_paid']").value
@@ -286,25 +290,57 @@ document.addEventListener("DOMContentLoaded", function () {
             document.querySelector("input[name='full_paid']").value = 0;
         }
 
-
-        // new add full paid functionality 
+        // new add full paid functionality
         let dueAmount = grandTotal - (paidAmount + fullPaidAmount);
-        
-            if (dueAmount < 0) {
-                    dueAmount = 0;
-            }
-            document.getElementById("dueAmount").textContent = `TK ${dueAmount.toFixed(2)}`;
-            document.querySelector("input[name='due_amount']").value = dueAmount.toFixed(2);
-        
+
+        if (dueAmount < 0) {
+            dueAmount = 0;
+        }
+        document.getElementById(
+            "dueAmount"
+        ).textContent = `TK ${dueAmount.toFixed(2)}`;
+        document.querySelector("input[name='due_amount']").value =
+            dueAmount.toFixed(2);
     }
 
     // Event Listeners for discount and shipping input charge
 
-    document.getElementById("inputDiscount").addEventListener("input", updateGrandTotal);
-    document.getElementById("inputShipping").addEventListener("input", updateGrandTotal);
-    document.querySelector("input[name='paid_amount']").addEventListener("input", updateDueAmount);
-    // new add full paid functionality 
-    document.querySelector("input[name='full_paid']").addEventListener("input", updateDueAmount);
+    document
+        .getElementById("inputDiscount")
+        .addEventListener("input", updateGrandTotal);
+    document
+        .getElementById("inputShipping")
+        .addEventListener("input", updateGrandTotal);
+    document
+        .querySelector("input[name='paid_amount']")
+        .addEventListener("input", updateDueAmount);
+    // new add full paid functionality
+    document
+        .querySelector("input[name='full_paid']")
+        .addEventListener("input", updateDueAmount);
+
+    // Attach events ONLY if elements exist
+    if (inputDiscount) {
+        inputDiscount.addEventListener("input", updateGrandTotal);
+        inputDiscount.addEventListener("input", function () {
+            if (displayDiscount) displayDiscount.textContent = this.value || 0;
+        });
+    }
+
+    if (inputShipping) {
+        inputShipping.addEventListener("input", updateGrandTotal);
+        inputShipping.addEventListener("input", function () {
+            if (shippingDisplay) shippingDisplay.textContent = this.value || 0;
+        });
+    }
+
+    if (paidAmountInput) {
+        paidAmountInput.addEventListener("input", updateDueAmount);
+    }
+
+    if (fullPaidInput) {
+        fullPaidInput.addEventListener("input", updateDueAmount);
+    }
 
     //start modal
 
@@ -419,14 +455,23 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
     // Event listeners for discount and shipping input change
-    document.getElementById("inputDiscount").addEventListener("input", updateGrandTotal);
-    document.getElementById("inputShipping").addEventListener("input", updateGrandTotal);
+    document
+        .getElementById("inputDiscount")
+        .addEventListener("input", updateGrandTotal);
+    document
+        .getElementById("inputShipping")
+        .addEventListener("input", updateGrandTotal);
 
-  
-    document.getElementById("inputDiscount").addEventListener("input", function () {
-    document.getElementById("displayDiscount").textContent = this.value || 0;
-    });
-        document.getElementById("inputShipping").addEventListener("input", function () {
-    document.getElementById("shippingDisplay").textContent = this.value || 0;
-    });
+    document
+        .getElementById("inputDiscount")
+        .addEventListener("input", function () {
+            document.getElementById("displayDiscount").textContent =
+                this.value || 0;
+        });
+    document
+        .getElementById("inputShipping")
+        .addEventListener("input", function () {
+            document.getElementById("shippingDisplay").textContent =
+                this.value || 0;
+        });
 });

@@ -1,8 +1,6 @@
 @extends('admin.admin_main')
-@section('title', 'Edit Profile')
 @section('admin')
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <div class="content">
 
         <!-- Start Content-->
@@ -19,9 +17,6 @@
                     </ol>
                 </div>
             </div>
-
-            
-
             <div class="row">
                 <div class="col-12">
                     <div class="card">
@@ -34,12 +29,13 @@
                                         class="rounded-circle avatar-xxl img-thumbnail float-start" alt="image profile">
 
                                     <div class="overflow-hidden ms-4">
-                                        <h4 class="m-0 text-dark fs-20">{{ $profileData->name }}r</h4>
-                                        <p class="my-1 text-muted fs-16">{{ $profileData->email }}</p>
-
+                                        <h4 class="m-0 text-dark fs-20">{{ $profileData->name }}</h4>
+                                        <p class="my-1 text-muted fs-16">{{ $profileData->email }}
+                                        </p>
                                     </div>
                                 </div>
                             </div>
+
 
                             <div class="tab-pane pt-4" id="profile_setting" role="tabpanel">
                                 <div class="row">
@@ -55,11 +51,10 @@
                                                         </div><!--end col-->
                                                     </div>
                                                 </div>
-
-                                                <div class="card-body">
-                                                    <form action="{{route('profile.store')}}" method="post" enctype="multipart/form-data">
-                                                        @csrf
-
+                                                <form action="{{ route('profile.store') }}" method="POST"
+                                                    enctype="multipart/form-data">
+                                                    @csrf
+                                                    <div class="card-body">
                                                         <div class="form-group mb-3 row">
                                                             <label class="form-label">Name</label>
                                                             <div class="col-lg-12 col-xl-12">
@@ -85,131 +80,129 @@
                                                         </div>
 
                                                         <div class="form-group mb-3 row">
-                                                            <label class="form-label">
-                                                                Address
-                                                            </label>
+                                                            <label class="form-label">Addresss</label>
                                                             <div class="col-lg-12 col-xl-12">
-                                                                <textarea class="form-control" name="address">{{ $profileData->address }}</textarea>
+                                                                <textarea name="address" class="form-control">
+                                                                    {{ $profileData->address }}
+                                                                </textarea>
                                                             </div>
                                                         </div>
 
                                                         <div class="form-group mb-3 row">
-                                                            <label class="form-label">Profile Image</label>
+                                                            <label class="form-label">Profile Photo</label>
                                                             <div class="col-lg-12 col-xl-12">
-                                                                <input class="form-control" type="file" name="photo" id="image"
-                                                                    value="{{ $profileData->phone }}">
+                                                                <input class="form-control" type="file" name="photo"
+                                                                    id="image">
+
                                                             </div>
                                                         </div>
 
                                                         <div class="form-group mb-3 row">
-                                                            <label class="form-label"></label>
+                                                            <label class="form-label">Profile Photo</label>
                                                             <div class="col-lg-12 col-xl-12">
-                                                                <img id="showImage" src="{{ !empty($profileData->photo) ? url('upload/user_images/' . $profileData->photo) : url('upload/no_image.jpg') }}"
-                                                                    class="rounded-circle avatar-xl img-thumbnail float-start"
+                                                                <img id="showImage"
+                                                                    src="{{ !empty($profileData->photo) ? url('upload/user_images/' . $profileData->photo) : url('upload/no_image.jpg') }}"
+                                                                    class="rounded-circle avatar-xxl img-thumbnail float-start"
                                                                     alt="image profile">
                                                             </div>
                                                         </div>
 
-                                                        <div class="form-group row">
-                                                            <div class="col-lg-12 col-xl-12">
-                                                                <button type="submit" class="btn btn-primary">
-                                                                    Save Changes</button>
-                                                                
-                                                            </div>
-                                                        </div>
+                                                        <button type="submit" class="btn btn-primary"> Save Change</button>
 
-                                                    </form>
+                                                    </div><!--end card-body-->
 
-
-
-                                                </div>
+                                                </form>
                                             </div>
-                                        </div> 
+                                        </div>
+
 
                                         <div class="col-lg-6 col-xl-6">
                                             <div class="card border mb-0">
+
                                                 <div class="card-header">
                                                     <div class="row align-items-center">
                                                         <div class="col">
                                                             <h4 class="card-title mb-0">Change Password</h4>
-                                                        </div>
-                                                        <!--end col-->
+                                                        </div><!--end col-->
                                                     </div>
                                                 </div>
 
-                                                <div class="card-body mb-0">
-                                                    <form action="{{ route('admin.password.update') }}" method="post"
-                                                        enctype="multipart/form-data" id="submit-form">
-                                                        @csrf
+                                                <form action="{{route('admin.password.update')}}" method="post">
+                                                    @csrf
+                                                    <div class="card-body mb-0">
                                                         <div class="form-group mb-3 row">
                                                             <label class="form-label">Old Password</label>
                                                             <div class="col-lg-12 col-xl-12">
-                                                                <input class="form-control" name="old_password"
-                                                                    type="password" id="old_password"
+                                                                <input class="form-control @error('old_password') is-invalid @enderror"
+                                                                    type="password" name="old_password" id="old_password"
                                                                     placeholder="Old Password">
-
+                                                                @error('old_password')
+                                                                    <span class="text-danger">{{ $message }}</span>
+                                                                @enderror
                                                             </div>
                                                         </div>
 
                                                         <div class="form-group mb-3 row">
                                                             <label class="form-label">New Password</label>
                                                             <div class="col-lg-12 col-xl-12">
-                                                                <input class="form-control" name="password" type="password"
-                                                                    id="password"
-                                                                    placeholder="New
-                                                                    Password">
-
+                                                                <input class="form-control @error('new_password') is-invalid @enderror"
+                                                                    type="password" name="new_password" id="new_password"
+                                                                    placeholder="New Password">
+                                                                @error('new_password')
+                                                                    <span class="text-danger">{{ $message }}</span>
+                                                                @enderror
                                                             </div>
                                                         </div>
 
                                                         <div class="form-group mb-3 row">
                                                             <label class="form-label">Confirm Password</label>
                                                             <div class="col-lg-12 col-xl-12">
-                                                                <input class="form-control" name="password_confirmation"
-                                                                    type="password" id="password_confirmation"
+                                                                <input class="form-control @error('new_password_confirmation') is-invalid @enderror"
+                                                                    type="password" name="new_password_confirmation" id="new_password_confirmation"
                                                                     placeholder="Confirm Password">
-
+                                                                @error('new_password_confirmation')
+                                                                    <span class="text-danger">{{ $message }}</span>
+                                                                @enderror
                                                             </div>
                                                         </div>
+                                                        
+                                                        
 
                                                         <div class="form-group row">
                                                             <div class="col-lg-12 col-xl-12">
-                                                                <button type="submit" class="btn btn-primary">
-                                                                    Change Password
-                                                                </button>
-                                                                <button type="button"
-                                                                    class="btn btn-danger">Cancel</button>
+                                                                <button type="submit" class="btn btn-primary">Change
+                                                                    Password</button>
                                                             </div>
                                                         </div>
-                                                    </form>
-                                                </div>
+
+                                                    </div><!--end card-body-->
+                                                </form>
                                             </div>
                                         </div>
 
                                     </div>
                                 </div>
-                            </div>
+                            </div> <!-- end education -->
 
 
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 
+
+
     <script type="text/javascript">
-        $(document).ready(function(){
-            $('#image').change(function(e){
+        $(document).ready(function() {
+            $('#image').change(function(e) {
                 var reader = new FileReader();
-                reader.onload = function(e){
+                reader.onload = function(e) {
                     $('#showImage').attr('src', e.target.result);
                 }
                 reader.readAsDataURL(e.target.files['0']);
-
             })
         })
     </script>
-    
 @endsection

@@ -6,13 +6,15 @@
     <i class="fa-solid fa-download"></i>
 </x-edit-button>
 
-
+@if(Auth::guard('web')->user()->can('edit_sale'))
 <x-edit-button href="{{ route('sale.edit', $sale->id) }}" class="btn btn-info btn-sm" style="background-color:#1da0a3" title="Edit">
     <i class="fa fa-edit"></i>
 </x-edit-button>
+@endif
 
 
-
+@if(Auth::guard('web')->user()->can('delete_sale'))
 <x-delete-button href="#" class="btn btn-danger btn-sm deleteBtn" data-url="{{ route('sale.destroy',$sale->id) }}" style="background-color: red" title="Delete">
     <i class="fa fa-trash-can"></i>
 </x-delete-button>
+@endif

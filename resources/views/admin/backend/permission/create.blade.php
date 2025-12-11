@@ -47,10 +47,17 @@
                                         <option value="Customer"> Customer </option>
                                         <option value="Product"> Product </option>
                                         <option value="Purchase"> Purchase </option>
+                                        <option value="PurchaseReturn"> Purchase Return </option>
                                         <option value="Sale"> Sale </option>
+                                        <option value="SaleReturn"> Sale Return </option>
                                         <option value="Due"> Due </option>
                                         <option value="Transfer"> Transfer </option>
                                         <option value="Report"> Report </option>
+                                        <option value="Role"> Roles</option>
+                                        <option value="Permission"> Permission</option>
+                                        <option value="RolesInPermission"> Roles In Permission</option>
+                                        <option value="ManageAdmin"> Manage Admin</option>
+
                                     </select>
                                 </div>
 

@@ -23,6 +23,10 @@ class PermissionController extends Controller
 
     public function index()
     {
+        if(!auth()->user()->hasPermissionTo('all_permission')){
+            abort(403, 'Unauthorized Action');
+        }
+        
         $permissions = Permission::all();
         return view('admin.backend.permission.index',compact('permissions'));
     }
@@ -63,6 +67,10 @@ class PermissionController extends Controller
 
     public function edit($id)
     {
+        if(!auth()->user()->hasPermissionTo('edit_permission')){
+            abort(403, 'Unauthorized Action');
+        }
+        
         $permission = Permission::findOrFail($id);
         return view('admin.backend.permission.edit', compact('permission')); 
     }
@@ -90,6 +98,10 @@ class PermissionController extends Controller
 
     public function destroy($id)
     {
+        if(!auth()->user()->hasPermissionTo('delete_permission')){
+            abort(403, 'Unauthorized Action');
+        }
+        
         try {
             $this->permissionRepository->delete($id);
 

@@ -24,6 +24,9 @@ class BrandController extends Controller
 
     public function index()
     {
+        if(!auth()->user()->hasPermissionTo('all_brand')){
+            abort(403, 'Unauthorized Action');
+        }
         $brandData = Brand::all();
         return view('admin.backend.brand.index', compact('brandData'));
     }
@@ -64,6 +67,10 @@ class BrandController extends Controller
 
     public function edit($id)
     {
+        if(!auth()->user()->hasPermissionTo('edit_brand')){
+            abort(403, 'Unauthorized Action');
+        }
+        
         $brand = Brand::findOrFail($id);
         return view('admin.backend.brand.edit', compact('brand'));
     }
@@ -96,6 +103,9 @@ class BrandController extends Controller
     
     public function destroy($id)
     {
+        if(!auth()->user()->hasPermissionTo('delete_brand')){
+            abort(403, 'Unauthorized Action');
+        }
         try {
             $this->brandRepository->delete($id);
 

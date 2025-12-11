@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminUserController;
+use App\Http\Controllers\AllReportController;
 use App\Http\Controllers\Backend\BrandController;
 use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\CustomerController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\Backend\PurchaseController;
 use App\Http\Controllers\Backend\ReportController;
 use App\Http\Controllers\Backend\ReturnPurchaseController;
 use App\Http\Controllers\Backend\RoleController;
+use App\Http\Controllers\Backend\RoleHasPermissionController;
 use App\Http\Controllers\Backend\SaleController;
 use App\Http\Controllers\Backend\SaleReturnController;
 use App\Http\Controllers\Backend\SupplierController;
@@ -32,6 +34,10 @@ Route::get('/dashboard', function () {
     return view('admin.index');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/dashboard', [AllReportController::class, 'dashboard'])->name('dashboard');
+});
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -41,6 +47,14 @@ Route::middleware('auth')->group(function () {
 require __DIR__ . '/auth.php';
 
 Route::get('admin/logout', [AdminController::class, 'adminLogout'])->name('admin.logout');
+// Route::post('/login', [AdminController::class, 'adminLogin'])->name('login');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile',[AdminController::class,'admin_profile'])->name('admin.profile');
+    Route::post('/profile/store',[AdminController::class,'profile_store'])->name('profile.store');
+    Route::post('/admin/password/update',[AdminController::class,'password_update'])->name('admin.password.update');
+
+});
 
 Route::middleware('auth')->group(function () {
     Route::resource('admin-user', AdminUserController::class);
@@ -114,6 +128,22 @@ Route::middleware('auth')->group(function () {
     Route::get('permission-datatable', [PermissionController::class, 'permissionDatatable'])->name('permission-datatable');
 
 
-    Route::get('add/roles/permission', [RoleController::class, 'addRolesPermission'])->name('add.roles.permission');
-    Route::post('roles/permission/store', [RoleController::class, 'rolePermissionStore'])->name('role.permission.store');
+    Route::get('all/roles/permission', [RoleHasPermissionController::class, 'allRolesPermission'])->name('all.roles.permission');
+    Route::get('add/roles/permission', [RoleHasPermissionController::class, 'addRolesPermission'])->name('add.roles.permission');
+    Route::post('roles/permission/store', [RoleHasPermissionController::class, 'rolePermissionStore'])->name('role.permission.store');
+    Route::get('/admin/edit/roles/{id}', [RoleHasPermissionController::class, 'adminEditRoles'])->name('edit.roles.permission');
+    Route::post('/admin/update/roles/{id}', [RoleHasPermissionController::class, 'adminUpdateRoles'])->name('role.permission.update');
+    Route::post('/admin/delete/roles/{id}', [RoleHasPermissionController::class, 'adminDeleteRole'])->name('role.permission.delete');
+    Route::get('/role-permission-datatable', [RoleHasPermissionController::class, 'rolePermissionDatatable'])->name('role-permission-datatable');
+
+    Route::get('all/admin', [RoleHasPermissionController::class, 'allAdmin'])->name('all.admin');
+    Route::get('/all-admin-datatable', [RoleHasPermissionController::class, 'allAdminDatatable'])->name('all-admin-datatable');
+    Route::get('add/admin', [RoleHasPermissionController::class, 'addAdmin'])->name('add.admin');
+    Route::post('/store/admin', [RoleHasPermissionController::class, 'storeAdmin'])->name('admin.store');
+    Route::get('/edit/admin/{id}', [RoleHasPermissionController::class, 'editAdmin'])->name('admin.edit');
+    Route::post('/update/admin/{id}', [RoleHasPermissionController::class, 'updateAdmin'])->name('admin.update');
+    Route::post('/admin/delete/{id}', [RoleHasPermissionController::class, 'deleteAdmin'])->name('admin.delete');
+
+
+
 });

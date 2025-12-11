@@ -26,6 +26,11 @@ class SaleController extends Controller
 
     public function index()
     {
+        
+        if(!auth()->user()->hasPermissionTo('all_sale')){
+            abort(403, 'Unauthorized Action');
+        }
+        
         $saleData = Sale::orderBy('id', 'desc')->get();
         return view('admin.backend.sale.index', compact('saleData'));
     }
@@ -107,6 +112,9 @@ class SaleController extends Controller
 
     public function edit($id)
     {
+        if(!auth()->user()->hasPermissionTo('edit_sale')){
+            abort(403, 'Unauthorized Action');
+        }
 
         $editSaleData = Sale::with('saleItems.product')->findOrFail($id);
         $customers = Customer::all();
@@ -170,6 +178,10 @@ class SaleController extends Controller
 
     public function destroy($id)
     {
+        if(!auth()->user()->hasPermissionTo('delete_sale')){
+            abort(403, 'Unauthorized Action');
+        }
+        
         try {
             $sale = Sale::findOrFail($id);
             $saleItems = SaleItem::where('sale_id', $id)->get();
